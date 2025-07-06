@@ -1,0 +1,10 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__T_NOTE_DATE_HSP_MAX
+    SELECT PULL_NOTE_ID
+          --  ,PULL_NOTE_LINE
+            ,MAX(PULL_CONTACT_DATE_REAL) AS MAX_CONTACT_DATE_REAL
+
+    FROM  {{ref('PULL_NOTE_HOSP_ALL')}} AS  PULL_NOTE_HOSP_ALL
+    GROUP BY PULL_NOTE_ID--, PULL_NOTE_LINE
+--END cte__T_NOTE_DATE_HSP_MAX
+--

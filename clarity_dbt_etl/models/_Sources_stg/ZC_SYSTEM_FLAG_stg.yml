@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_SYSTEM_FLAG_stg
+    description: An internal status flag that can signify if the charge was voided or deleted.
+    columns:
+      - name: SYSTEM_FLAG_C
+        description: 	An internal status flag that can signify if the charge was voided or deleted.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_SYSTEM_FLAG_NAME
+        description: UPPER("NAME") The name given to this category item.
+

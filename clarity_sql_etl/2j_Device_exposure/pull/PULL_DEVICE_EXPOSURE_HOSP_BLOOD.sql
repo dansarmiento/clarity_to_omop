@@ -1,0 +1,46 @@
+/*******************************************************************************
+* Script Name: PULL_DEVICE_EXPOSURE_HOSP_BLOOD
+* Description: Retrieves device exposure data related to blood administration
+*             in hospital settings
+* 
+* Tables Used:
+* - PULL_VISIT_OCCURRENCE_HSP
+* - ORDER_PROC
+* - CLARITY_EAP
+* - T_CODES_DEVICE_EXPOSURE
+*******************************************************************************/
+
+SELECT DISTINCT 
+    -- OMOP Standard Fields
+    PULL_VISIT_OCCURRENCE_HSP.PERSON_ID                  AS PERSON_ID,
+    ORDER_PROC.PROC_START_TIME::DATE                     AS DEVICE_EXPOSURE_START_DATE,
+    ORDER_PROC.PROC_START_TIME                          AS DEVICE_EXPOSURE_START_DATETIME,
+    COALESCE(PROC_ENDING_TIME, PROC_START_TIME)::DATE   AS DEVICE_EXPOSURE_END_DATE,
+    COALESCE(PROC_ENDING_TIME, PROC_START_TIME)         AS DEVICE_EXPOSURE_END_DATETIME,
+    T_CODES.BLOOD_ADMIN_UNIT                            AS UNIQUE_DEVICE_ID,
+    ORDER_PROC.QUANTITY                                 AS QUANTITY,
+    AUTHRZING_PROV_ID                                   AS PROVIDER_SOURCE_VALUE,
+    0                                                   AS VISIT_DETAIL_ID,
+    ORDER_PROC.PROC_ID::VARCHAR 
+        || ' : ' || CLARITY_EAP.PROC_CODE
+        || ' : ' || CLARITY_EAP.PROC_NAME               AS DEVICE_SOURCE_VALUE,
+
+    -- Additional Fields for Stage
+    PULL_VISIT_OCCURRENCE_HSP.PULL_CSN_ID               AS PULL_CSN_ID,
+    ORDER_PROC.PROC_ID::VARCHAR                         AS PULL_PROC_ID,
+    CLARITY_EAP.PROC_CODE                               AS PULL_PROC_CODE,
+    CLARITY_EAP.PROC_NAME                               AS PULL_PROC_NAME
+
+FROM 
+    CARE_RES_OMOP_DEV2_WKSP.OMOP_PULL.PULL_VISIT_OCCURRENCE_HSP AS PULL_VISIT_OCCURRENCE_HSP
+
+    INNER JOIN CARE_BRONZE_CLARITY_PROD.DBO.ORDER_PROC AS ORDER_PROC
+        ON  PULL_VISIT_OCCURRENCE_HSP.PULL_CSN_ID = ORDER_PROC.PAT_ENC_CSN_ID
+        AND ORDER_PROC.FUTURE_OR_STAND IS NULL
+        AND ORDER_PROC.INSTANTIATED_TIME IS NOT NULL
+
+    LEFT JOIN CARE_BRONZE_CLARITY_PROD.DBO.CLARITY_EAP AS CLARITY_EAP
+        ON ORDER_PROC.PROC_ID = CLARITY_EAP.PROC_ID
+
+    INNER JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_PULL.T_CODES_DEVICE_EXPOSURE AS T_CODES
+        ON ORDER_PROC.ORDER_PROC_ID = T_CODES.ORDER_ID;

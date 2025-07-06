@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_SEX_stg
+    description: This table stores possible options for sex.
+    columns:
+      - name: RCPT_MEM_SEX_C
+        description: 	The category number for sex. 
+        tests:
+          - unique
+          - not_null
+      - name: ZC_SEX_NAME
+        description: UPPER("NAME") The name given to this category item.

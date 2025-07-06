@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: EDG_CURRENT_ICD9_stg
+    description: 	Diagnosis terms can map to multiple codes in a code set. This table discretely lists the mapped codes for term-type diagnoses. Code-type diagnoses will also have a row in this table if the code is in ICD-9-CM.
+    columns:
+      - name: DX_ID
+        description: 	The unique identifier (.1 item) for the diagnosis record.
+      - name: LINE
+        description: 	The line number for the information associated with this record. Multiple pieces of information can be associated with this record. This value corresponds to the position in the comma-delimited list from CLARITY_EDG.CURRENT_ICD9_CODES
+      - name: CODE
+        description: 	For term-type record, this is the record's current mapped ICD-9-CM code(s)
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - DX_ID
+            - LINE  

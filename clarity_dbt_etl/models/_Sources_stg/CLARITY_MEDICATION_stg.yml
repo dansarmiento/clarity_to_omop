@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: CLARITY_MEDICATION_stg
+    description: The CLARITY_MEDICATION table contains high-level information from all the medications for use in your facility.
+    columns:
+      - name: MEDICATION_ID
+        description: 	The unique ID of the medication record.
+        tests:
+          - unique
+          - not_null         
+      - name: NAME
+        description: 	The name of the medication.

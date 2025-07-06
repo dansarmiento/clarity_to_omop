@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: ZC_STATE_stg
+    description: This table contains the categories for state/province.
+    columns:
+      - name: STATE_C
+        description: 	The category number for the state/province. 
+        tests:
+          - unique
+          - not_null
+      - name: STATE_C_NAME
+        description: UPPER("NAME") The name given to this category item.
+      - name: STATE_C_ABBR
+        description: UPPER("ABBR") 	The abbreviation for the category value
+

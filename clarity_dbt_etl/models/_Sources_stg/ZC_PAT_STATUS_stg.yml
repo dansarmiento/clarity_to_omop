@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_PAT_STATUS_stg
+    description: No description available
+    columns:
+      - name: ADT_PATIENT_STAT_C
+        description: 	No description available
+        tests:
+          - unique
+          - not_null
+      - name: ZC_PAT_STATUS_NAME
+        description: UPPER("NAME") The name given to this category item.
+

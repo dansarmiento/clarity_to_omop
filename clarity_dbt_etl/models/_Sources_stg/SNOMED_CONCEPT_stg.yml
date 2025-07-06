@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: SNOMED_CONCEPT_stg
+    description: This table contains data related to SNOMED concepts. The data in this table is populated by the SNOMED import.
+    columns:
+      - name: CONCEPT_ID
+        description: The unique ID (CUI) of the concept record (HLX), such as EPIC#2939.
+        tests:
+          - unique
+          - not_null 
+      - name: FULLY_SPECIFIED_NM
+        description: The fully specified name of the SNOMED concept.
+
+

@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: CDM_SOURCE
+    description: The CDM_SOURCE table contains detail about the source database and the process used to transform the data into the OMOP Common Data Model.
+    columns:
+      - name: CDM_SOURCE_NAME
+        description: 	The name of the CDM instance.
+        tests:
+          - not_null 
+
+      - name: CDM_SOURCE_ABBREVIATION
+        description: 	The abbreviation of the CDM instance
+        tests:
+          - not_null 
+
+      - name: CDM_HOLDER
+        description: 	The holder of the CDM instance.
+        tests:
+          - not_null 
+
+      - name: SOURCE_DESCRIPTION
+        description: The description of the CDM instance.
+
+      - name: SOURCE_DOCUMENTATION_REFERENCE
+        description: none
+
+      - name: CDM_ETL_REFERENCE
+        description: Version of the ETL script used. e.g. link to the Git releas
+ 
+      - name: SOURCE_RELEASE_DATE
+        description: The date the data was extracted from the source system. In some systems that is the same as the date the ETL was run. Typically the latest even date in the source is on the source_release_date.
+        tests:
+          - not_null
+
+      - name: CDM_RELEASE_DATE
+        description: 	The date the ETL script was completed. Typically this is after the source_release_date.
+        tests:
+          - not_null 
+
+      - name: CDM_VERSION
+        description: Version of the OMOP CDM used as string. e.g. v5.4
+
+
+      - name: VOCABULARY_VERSION
+        description: 	Version of the OMOP standardised vocabularies loaded
+        tests:
+          - not_null 
+ 
+      - name: VOCABULARY_VERSION_CONCEPT_ID
+        description: The Concept Id representing the version of the CDM.
+        tests:
+          - not_null 
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID

@@ -1,0 +1,68 @@
+/******************************************************************************
+* Script Name: PULL_CONDITION_OCCURRENCE_AMB_PROB_SNO
+* Description: Retrieves condition occurrence data from ambulatory problem lists
+*             with SNOMED codes
+******************************************************************************/
+
+-- Common Table Expression to determine problem start and end dates
+WITH T_PROB_START_END AS (
+    SELECT DISTINCT
+        PROBLEM_LIST.PROBLEM_LIST_ID,
+        PROBLEM_LIST.PROBLEM_EPT_CSN AS PAT_ENC_CSN_ID,
+        -- Get earliest noted date across problem list history
+        MIN(COALESCE(PROBLEM_LIST.NOTED_DATE, PROBLEM_LIST_HX.HX_DATE_NOTED))
+            OVER (PARTITION BY PROBLEM_LIST.PROBLEM_LIST_ID) AS CONDITION_START_DATETIME,
+        -- Get latest resolved date across problem list history
+        MAX(COALESCE(PROBLEM_LIST.RESOLVED_DATE, PROBLEM_LIST_HX.HX_DATE_RESOLVED))
+            OVER (PARTITION BY PROBLEM_LIST.PROBLEM_LIST_ID) AS CONDITION_END_DATETIME
+    FROM CARE_BRONZE_CLARITY_PROD.DBO.PROBLEM_LIST AS PROBLEM_LIST
+    LEFT JOIN CARE_BRONZE_CLARITY_PROD.DBO.PROBLEM_LIST_HX AS PROBLEM_LIST_HX
+        ON PROBLEM_LIST.PROBLEM_LIST_ID = PROBLEM_LIST_HX.PROBLEM_LIST_ID
+    WHERE PROBLEM_LIST_HX.HX_STATUS_C <> 3
+)
+
+SELECT DISTINCT
+    -- Stage Attributes
+    PULL_VISIT_OCCURRENCE_AMB.PERSON_ID                AS PERSON_ID,
+    PULL_VISIT_OCCURRENCE_AMB.VISIT_START_DATE         AS CONDITION_START_DATE,
+    PULL_VISIT_OCCURRENCE_AMB.VISIT_START_DATETIME     AS CONDITION_START_DATETIME,
+    PULL_VISIT_OCCURRENCE_AMB.VISIT_END_DATE          AS CONDITION_END_DATE,
+    PULL_VISIT_OCCURRENCE_AMB.VISIT_END_DATETIME      AS CONDITION_END_DATETIME,
+    NULL                                               AS STOP_REASON,
+    -- Determine condition status based on principal indicator
+    CASE 
+        WHEN PROBLEM_LIST.PRINCIPAL_PL_YN = 'Y' 
+             OR PROBLEM_LIST.PRINCIPAL_PL_YN IS NULL
+            THEN 'PRIMARY_PROB'
+        ELSE 'SECONDARY_PROB'
+    END                                                AS CONDITION_STATUS_SOURCE_VALUE,
+    PULL_PROVIDER_SOURCE_VALUE                         AS PROVIDER_SOURCE_VALUE,
+
+    -- Additional Attributes for Stage
+    PULL_VISIT_OCCURRENCE_AMB.PULL_CSN_ID             AS PULL_CSN_ID,
+    PULL_VISIT_OCCURRENCE_AMB.VISIT_START_DATE        AS PULL_VISIT_DATE,
+    T_SNO_CODE.DX_ID                                  AS PULL_DX_ID,
+    T_SNO_CODE.DX_NAME                                AS PULL_DX_NAME,
+    T_SNO_CODE.CURRENT_ICD9_LIST                      AS PULL_CURRENT_ICD9_LIST,
+    T_SNO_CODE.CURRENT_ICD10_LIST                     AS PULL_CURRENT_ICD10_LIST,
+    T_SNO_CODE.SNOMED_CODE                            AS PULL_SNOMED_CODE
+
+FROM CARE_BRONZE_CLARITY_PROD.DBO.PROBLEM_LIST AS PROBLEM_LIST
+
+    -- Join to get visit occurrence information
+    INNER JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_PULL.PULL_VISIT_OCCURRENCE_AMB AS PULL_VISIT_OCCURRENCE_AMB
+        ON PROBLEM_LIST.PROBLEM_EPT_CSN = PULL_VISIT_OCCURRENCE_AMB.PULL_CSN_ID
+
+    -- Join to get problem start and end dates
+    INNER JOIN T_PROB_START_END  
+        ON T_PROB_START_END.PROBLEM_LIST_ID = PROBLEM_LIST.PROBLEM_LIST_ID
+
+    -- Join to get attending provider information
+    LEFT JOIN CARE_BRONZE_CLARITY_PROD.DBO.HSP_ATND_PROV AS HSP_ATND_PROV
+        ON PULL_VISIT_OCCURRENCE_AMB.PULL_CSN_ID = HSP_ATND_PROV.PAT_ENC_CSN_ID
+        AND VISIT_START_DATETIME BETWEEN ATTEND_FROM_DATE
+            AND COALESCE(ATTEND_TO_DATE, GETDATE())
+
+    -- Join to get SNOMED codes and related diagnosis information
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_PULL.T_SNO_CODE AS T_SNO_CODE
+        ON PROBLEM_LIST.DX_ID = T_SNO_CODE.DX_ID;

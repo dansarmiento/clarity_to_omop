@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_ED_DISPOSITION_stg
+    description: This table contains the category information for ed dispositions.
+    columns:
+      - name: ED_DISPOSITION_C
+        description: 	This is the ed disposition category code.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_ED_DISPOSITION_NAME
+        description: UPPER("NAME") The name given to this category item.

@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select SOURCE_RELEASE_DATE
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.CDM_SOURCE
+where SOURCE_RELEASE_DATE is null
+
+

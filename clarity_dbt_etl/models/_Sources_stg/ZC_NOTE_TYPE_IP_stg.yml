@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_NOTE_TYPE_IP_stg
+    description: No description available
+    columns:
+      - name: TYPE_IP_C
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_NOTE_TYPE_IP_NAME
+        description: UPPER("NAME") The name given to this category item.
+

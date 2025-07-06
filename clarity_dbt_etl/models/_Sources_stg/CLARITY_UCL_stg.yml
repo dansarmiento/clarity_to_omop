@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: CLARITY_UCL_stg
+    description: Universal Charge Lines (UCL) information. Each row represents one UCL transaction.
+    columns:
+      - name: UCL_ID
+        description: The unique ID associated with the charge record. 
+        tests:
+          - unique
+          - not_null
+      - name: SERVICE_DATE_DT
+        description: 		The service date for the charge 
+      - name: PATIENT_ID
+        description: 	The patient the charge is associated with.
+      - name: EPT_CSN
+        description: 	The contact serial number of the patient associated with the charge.        
+
+

@@ -1,0 +1,7 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__SOURCE_TO_CONCEPT_MAP_DISCHARGE
+    SELECT *
+    FROM {{ref('SOURCE_TO_CONCEPT_MAP_stg')}}
+    WHERE SOURCE_VOCABULARY_ID IN ('SH_discharge','SH_DISCHARGE')
+--END cte__SOURCE_TO_CONCEPT_MAP_DISCHARGE
+--

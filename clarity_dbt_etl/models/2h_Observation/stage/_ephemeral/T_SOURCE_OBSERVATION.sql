@@ -1,0 +1,15 @@
+  {{ config(materialized='ephemeral') }}
+--BEGIN cte__T_SOURCE_OBSERVATION
+    SELECT CONCEPT_ID
+            ,CONCEPT_CODE
+            ,CONCEPT_NAME
+
+    FROM {{ref('CONCEPT_stg')}} AS C
+    WHERE UPPER(C.VOCABULARY_ID) IN ('SNOMED')
+            AND (C.INVALID_REASON IS NULL
+                OR C.INVALID_REASON = '')
+            AND UPPER(C.DOMAIN_ID) = 'OBSERVATION'
+            AND UPPER(CONCEPT_NAME) LIKE 'ALLERGY TO %'
+            AND UPPER(CONCEPT_CLASS_ID) = 'CLINICAL FINDING'
+--END cte__T_SOURCE_OBSERVATION
+--

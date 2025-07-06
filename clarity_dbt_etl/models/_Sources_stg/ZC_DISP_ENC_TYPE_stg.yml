@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_DISP_ENC_TYPE_stg
+    description: This table contains the category information for encounter types.
+    columns:
+      - name: DISP_ENC_TYPE_C
+        description: 	This is the encounter type category number code.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_DISP_ENC_TYPE_NAME
+        description: UPPER("NAME") The name given to this category item.

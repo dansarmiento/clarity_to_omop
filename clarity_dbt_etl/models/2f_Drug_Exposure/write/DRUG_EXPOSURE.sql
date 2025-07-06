@@ -1,0 +1,50 @@
+--DRUG_EXPOSURE
+{{ config(materialized = 'view', schema = 'OMOP') }}
+
+SELECT DISTINCT
+    DRUG_EXPOSURE_ID
+    , PERSON_ID
+    , DRUG_CONCEPT_ID
+    , DRUG_EXPOSURE_START_DATE
+    , DRUG_EXPOSURE_START_DATETIME
+    , DRUG_EXPOSURE_END_DATE
+    , DRUG_EXPOSURE_END_DATETIME
+    , VERBATIM_END_DATE
+    , DRUG_TYPE_CONCEPT_ID
+    , STOP_REASON
+    , REFILLS
+    , QUANTITY
+    , DAYS_SUPPLY
+    , SIG
+    , ROUTE_CONCEPT_ID
+    , LOT_NUMBER
+    , PROVIDER_ID
+    , VISIT_OCCURRENCE_ID
+    , VISIT_DETAIL_ID
+    , DRUG_SOURCE_VALUE --Human readable Source Value use src_VALUE_ID below to link
+    , DRUG_SOURCE_CONCEPT_ID
+    , ROUTE_SOURCE_VALUE
+    ,  DOSE_UNIT_SOURCE_VALUE
+
+ ------Non OMOP fields -----------
+    , etl_MODULE
+    , phi_PAT_ID
+    , phi_MRN_CPI
+    , phi_CSN_ID
+----- Link to source
+    , src_TABLE
+    , src_FIELD
+    , src_VALUE_ID
+
+FROM
+
+ {{ref('DRUG_EXPOSURE_RAW')}} AS DRUG_EXPOSURE
+
+    LEFT JOIN (
+        SELECT CDT_ID
+        FROM {{ref('QA_ERR_DBT')}} AS QA_ERR_DBT
+        WHERE (STANDARD_DATA_TABLE = 'DRUG_EXPOSURE')
+            AND (ERROR_TYPE IN ('FATAL', 'INVALID DATA'))
+        ) AS EXCLUSION_RECORDS
+        ON DRUG_EXPOSURE.DRUG_EXPOSURE_ID = EXCLUSION_RECORDS.CDT_ID
+    WHERE (EXCLUSION_RECORDS.CDT_ID IS NULL)

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: ZC_PATIENT_RACE_stg
+    description: No description available
+    columns:
+      - name: PATIENT_RACE_C
+        description: 	No description available
+        tests:
+          - unique
+          - not_null
+      - name: ZC_PATIENT_RACE_NAME
+        description: UPPER("NAME") The name given to this category item.
+
+

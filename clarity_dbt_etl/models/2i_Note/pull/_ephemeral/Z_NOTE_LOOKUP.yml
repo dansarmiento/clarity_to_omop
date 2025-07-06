@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: Z_NOTE_LOOKUP
+    description: note lookup
+    columns:
+      - name: PAT_ENC_CSN_ID
+        #tests:
+        #  - unique
+        #  - not_null 

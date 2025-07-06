@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select NOTE_CLASS_CONCEPT_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.NOTE
+where NOTE_CLASS_CONCEPT_ID is null
+
+

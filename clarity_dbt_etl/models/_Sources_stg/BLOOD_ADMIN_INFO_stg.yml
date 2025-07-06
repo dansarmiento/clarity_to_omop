@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: BLOOD_ADMIN_INFO_stg
+    description: This table holds the information for a blood unit associated with an order.
+    columns:
+      - name: ORDER_ID
+        description: 	The unique identifier for the order record.
+      - name: LINE
+        description: 	The line number for the information associated with this record.
+      - name: BLOOD_ADMIN_UNIT
+        description: 	The unit number for the blood product documented as part of an administration.
+      - name: BLOOD_ADMIN_PROD
+        description: 		The product code for the blood product documented as part of an administration.
+      - name: BLOOD_ADMIN_TYPE
+        description: 	The blood type for the blood product documented as part of an administration.
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - ORDER_ID
+            - LINE

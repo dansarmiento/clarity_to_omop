@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: PAT_ENC_HSP_stg
+    description: This table is the primary table for hospital encounter information. A hospital encounter is a contact in the patient record created through an ADT workflow such as preadmission, admission, ED Arrival, discharge, and hospital outpatient visit (HOV) contacts.
+    columns:
+      - name: PAT_ENC_CSN_ID
+        description: 	The unique contact serial number for this contact.
+        tests:
+          - unique
+          - not_null
+      - name: PAT_ID
+        description: The unique ID of the patient record for this row.
+      - name: CONTACT_DATE
+        description: 	This column refers to the date an admission was created, not necessarily the date of admission. This column is not overly useful for reporting purposes and generally should not be used.
+      - name: HOSP_ADMSN_TYPE_C
+        description: The category value corresponding to the admission type for the patient contact
+      - name: ADT_PAT_CLASS_C
+        description: 	The category value corresponding to the patient classification for this patient contact.
+      - name: ADT_PATIENT_STAT_C
+        description: The category value corresponding to the patient status for this patient contact.
+      - name: HSP_ACCOUNT_ID
+        description: 	The unique ID number of the hospital account for this patient contact.
+      - name: ADMIT_SOURCE_C
+        description: 	The category value corresponding to the admission source for this patient contact
+      - name: DISCH_DISP_C
+        description: 	The category value corresponding to the discharge disposition for this patient contact.
+      - name: ED_DISPOSITION_C
+        description: The disposition of the patient when discharged from the ED.
+      - name: HOSP_ADMSN_TIME
+        description: The date and time that the patient was first admitted to the facility, bedded in the ED, or confirmed for an HOV for this contact, regardless of patient's base patient class.
+      - name: INP_ADM_DATE
+        description: Date-time of the inpatient admission. This is the date/time during the hospital encounter when the patient first received a base patient class of inpatient. This can be different than the value for the admission date if the patient was assigned an emergency or outpatient base patient class.
+      - name: EXP_ADMISSION_TIME
+        description: The date and time of the expected admission for this patient contact.
+      - name: OP_ADM_DATE
+        description: The date and time during the hospital encounter when the patient first received a base patient class of outpatient.
+      - name: EMER_ADM_DATE
+        description: The date and time during the hospital encounter when the patient first received a base patient class of emergency.
+      - name: INSTANT_OF_ENTRY_TM
+        description: 	The instant this contact was created in the system.
+      - name: ED_DISP_TIME
+        description: The date and time that the disposition was entered.
+      - name: HOSP_DISCH_TIME
+        description: 	The hospital discharge date and time for this patient contact.
+      - name: HOSPITAL_AREA_ID
+        description: This field identifies the hospital area associated with the hospital unit in this patient contact.
+      - name: DEPARTMENT_ID
+        description: The ID number of the unit for the most recent location of the patient for this patient contact.
+      - name: INPATIENT_DATA_ID
+        description: 	The unique ID of the Inpatient Data Store record.
+      - name: IP_EPISODE_ID
+        description: The unique ID of the Inpatient episode record. This includes discharges from the ED.
+      - name: ED_EPISODE_ID
+        description: The unique ID of the Inpatient episode record for the ED visit.
+      - name: BILL_ATTEND_PROV_ID
+        description: 	Billing Attending Provider - The attending provider that is or will be specified on the hospital account and claim when billed.

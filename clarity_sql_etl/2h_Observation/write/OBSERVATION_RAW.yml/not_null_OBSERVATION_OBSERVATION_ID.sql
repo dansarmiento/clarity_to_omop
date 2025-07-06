@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select OBSERVATION_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.OBSERVATION
+where OBSERVATION_ID is null
+
+

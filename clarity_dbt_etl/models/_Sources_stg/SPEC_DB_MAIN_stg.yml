@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: SPEC_DB_MAIN_stg
+    description: 	The SPEC_DB_MAIN table contains basic information about your specimen records. These include clinical pathology, anatomic pathology, and quality control specimens. One row in this table represents one specimen.
+    columns:
+      - name: SPECIMEN_ID
+        description: The unique ID of the specimen record
+        tests:
+          - unique
+          - not_null
+      - name: SPEC_EPT_PAT_ID
+        description: The unique identifier of the patient whom this specimen belongs to.
+      - name: SPEC_DTM_COLLECTED
+        description: The date and time when the specimen was collected.
+      - name: SPEC_DTM_RECEIVED
+        description: The date and time when the specimen was received.
+      - name: SPEC_SOURCE_C
+        description: The specimen source category for the specimen.
+      - name: SPECIMEN_COL_ID
+        description: The unique identifier of the specimen collection record which is associated with this specimen.
+

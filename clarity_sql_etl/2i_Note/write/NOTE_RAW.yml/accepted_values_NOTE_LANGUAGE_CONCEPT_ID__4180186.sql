@@ -1,0 +1,22 @@
+
+    
+    
+
+with all_values as (
+
+    select
+        LANGUAGE_CONCEPT_ID as value_field,
+        count(*) as n_records
+
+    from CARE_RES_OMOP_DEV2_WKSP.OMOP.NOTE
+    group by LANGUAGE_CONCEPT_ID
+
+)
+
+select *
+from all_values
+where value_field not in (
+    '4180186'
+)
+
+

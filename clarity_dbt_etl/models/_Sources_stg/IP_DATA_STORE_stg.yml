@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: IP_DATA_STORE_stg
+    description: This table contains generic information related to a patient's inpatient stay, including data on patient education, notes, and other topics
+    columns:
+      - name: INPATIENT_DATA_ID
+        description: The unique ID of the inpatient data store record.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: EPT_CSN
+        description: Link to Contact Serial Number in EPT for associated encounter.

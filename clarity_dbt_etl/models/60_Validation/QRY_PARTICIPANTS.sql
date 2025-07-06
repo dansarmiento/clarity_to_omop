@@ -1,0 +1,56 @@
+-- QRY_PARTICIPANTS
+
+-- WITH PII AS (
+SELECT MRN_CPI AS MRN
+    , EHR_PATIENT_ID AS EHR_PAT_ID
+    , null AS ALT_ID
+    , PERSON_ID AS PID
+    , null AS FIRSTNAME
+    , FIRST_NAME AS EHR_FIRST_NAME
+    , null AS ALT_FIRST_NAME
+    , null AS LASTNAME
+    , LAST_NAME AS EHR_LAST_NAME
+    , null AS ALT_LAST_NAME
+    , null AS DOB
+    , DATE_OF_BIRTH AS EHR_BIRTH_DATE
+    , null AS ALT_BIRTH_DATE
+    , null AS SEX
+    , SEX AS EHR_SEX
+    , null AS ALT_SEX
+    , null AS ADDRESS
+    , STREET_ADDRESS ||', ' || CITY ||', ' || STATE ||', ' || ZIP AS EHR_ADDRESS
+    , null AS ALT_ADDRESS
+    , null AS "PHONE NUMBER"
+    , PHONE AS EHR_PHONE
+    , null AS ALT_PHONE
+    , null AS EMAIL
+    , EMAIL AS EHR_EMAIL
+    , null AS ALT_EMAIL
+    -- , "MANUAL VALIDATION"
+
+FROM {{ref('PATIENT_DRIVER')}} AS PATIENT_DRIVER
+-- )
+
+-- SELECT PII.MRN
+--     , PII.EHR_PAT_ID
+--     , PII.ALT_ID
+--     , PERSON.PERSON_ID AS PID
+--     , PII.EHR_FIRST_NAME
+--     , PII.EHR_LAST_NAME
+--     , PII.ALT_FIRST_NAME
+--     , PII.ALT_LAST_NAME
+--     , PII.EHR_BIRTH_DATE
+--     , PII.ALT_BIRTH_DATE
+--     , PII.EHR_SEX
+--     , PII.ALT_SEX
+--     , PII.EHR_ADDRESS
+--     , PII.ALT_ADDRESS
+--     , PII.EHR_PHONE
+--     , PII.ALT_PHONE
+--     , PII.EHR_EMAIL
+--     , PII.ALT_EMAIL
+
+-- FROM {{ref('PERSON')}} AS PERSON
+
+-- LEFT JOIN PII
+--     ON PERSON.PERSON_ID = PII.PID

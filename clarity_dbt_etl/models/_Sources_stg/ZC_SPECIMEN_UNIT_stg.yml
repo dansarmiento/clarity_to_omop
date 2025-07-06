@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_SPECIMEN_UNIT_stg
+    description: This table stores possible options for specimen weight units.
+    columns:
+      - name: SPECIMEN_UNIT_C
+        description: 	The category number for the specimen weight unit. 
+        tests:
+          - unique
+          - not_null
+      - name: ZC_SPECIMEN_UNIT_NAME
+        description: UPPER("NAME") The name given to this category item.

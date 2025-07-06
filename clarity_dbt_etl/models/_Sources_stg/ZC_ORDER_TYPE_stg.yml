@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_ORDER_TYPE_stg
+    description: This table contains information for the order type category list.
+    columns:
+      - name: ORDER_TYPE_C
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_ORDER_TYPE_NAME
+        description: UPPER("NAME") The name given to this category item.

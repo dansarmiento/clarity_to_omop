@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: AN_HSB_LINK_INFO_stg
+    description: This table stores Anesthesia episode-level information.
+    columns:
+      - name: SUMMARY_BLOCK_ID
+        description: The unique ID of the Episode (HSB) record for this row. Episodes store information including the start and end dates, episode status and type, and any contacts associated with the episode.
+        tests:
+          - unique
+          - not_null         
+      - name: AN_BILLING_CSN_ID
+        description: The unique contact serial number for the Billing Encounter. This contains all the billing information needed to drop charges.
+

@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select SPECIALTY_CONCEPT_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.PROVIDER
+where SPECIALTY_CONCEPT_ID is null
+
+

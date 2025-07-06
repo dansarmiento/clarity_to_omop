@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: ORDER_INSTANTIATED_stg
+    description: 	This table contains a list of orders that have been instantiated.
+    columns:
+      - name: ORDER_ID
+        description: 	The unique ID of the order record.
+      - name: LINE
+        description: 	The line count for this table as determined by the number of instantiated orders.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - ORDER_ID
+            - LINE

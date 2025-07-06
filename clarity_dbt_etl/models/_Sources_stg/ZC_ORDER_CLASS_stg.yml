@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_ORDER_CLASS_stg
+    description: No description available
+    columns:
+      - name: ORDER_CLASS_C
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_ORDER_CLASS_NAME
+        description: UPPER("NAME") The name given to this category item.
+

@@ -1,0 +1,100 @@
+version: 2
+
+models:
+
+  - name: NOTE
+    description: The NOTE table captures unstructured information that was recorded by a provider about a patient in free text (in ASCII, or preferably in UTF8 format) notes on a given date.
+    columns:
+      - name: NOTE_ID
+        description: A unique identifier for each note.
+        tests:
+          - unique
+          - not_null
+
+      - name: PERSON_ID
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PERSON_RAW')
+              field: PERSON_ID
+
+      - name: note_date
+        description: The date the note was recorded.
+        tests:
+          - not_null
+
+      - name: note_datetime
+        description: If time is not given set the time to midnight.
+
+      - name: NOTE_TYPE_CONCEPT_ID
+        description: Hard-coded as 32817 (The provenance of the note. Most likely this will be EHR)
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 32817
+
+      - name: NOTE_CLASS_CONCEPT_ID
+        description: Filled with TARGET_CONCEPT_ID if applicable, 0 otherwise. (A Standard Concept Id representing the HL7 LOINC Document Type Vocabulary classification of the note)
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: note_title
+        description: The title of the note.
+
+      - name: note_text
+        description: The content of the note.
+
+      - name: ENCODING_CONCEPT_ID
+        description: Hard-coded as 32678 (This is the Concept representing the character encoding type; Put the Concept Id that represents the encoding character type here. Currently the only option is UTF-8 (32678). It the note is encoded in any other type, like ASCII then put 0.)
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 32678
+
+      - name: LANGUAGE_CONCEPT_ID
+        description: Hard-coded as 4180186 (The language of the note; Use Concepts that are descendants of the concept 4182347 (World Languages).)
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 4180186
+
+      - name: PROVIDER_ID
+        description: The Provider who wrote the note; The ETL may need to make a determination on which provider to put here.
+        tests:
+          # - not_null:
+          #     config:
+          #       severity: warn
+          - relationships:
+              to: ref('PROVIDER_RAW')
+              field: PROVIDER_ID
+
+      - name: VISIT_OCCURRENCE_ID
+        description: The Visit during which the note was written.
+        tests:
+          - not_null:
+              config:
+                severity: warn
+          - relationships:
+              to: ref('VISIT_OCCURRENCE')
+              field: VISIT_OCCURRENCE_ID
+              config:
+                severity: warn
+                
+      - name: VISIT_DETAIL_ID
+        description: Not Applicable - Value:0 (The Visit Detail during which the note was written.)
+        # tests:
+        #   - not_null:
+        #       config:
+        #         severity: warn
+        # - relationships:
+        #     to: ref('VISIT_DETAIL')
+        #     field: VISIT_DETAIL_ID
+
+      - name: note_source_value
+        description: The source value mapped to the NOTE_CLASS_CONCEPT_ID.

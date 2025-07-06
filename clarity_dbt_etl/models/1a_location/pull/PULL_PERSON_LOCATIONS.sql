@@ -1,0 +1,32 @@
+-- PULL_PERSON_LOCATIONS  
+-- {{ config(materialized='ephemeral') }}
+
+    SELECT
+        DISTINCT MIN(PATIENT.ADD_LINE_1) AS ADDRESS_1
+        , MIN(PATIENT.ADD_LINE_2) AS ADDRESS_2
+        , MIN(PATIENT.CITY) AS CITY
+        , MIN(LEFT(ZC_STATE_ABBR, 2)) AS STATE
+        , MIN(LEFT(PATIENT.ZIP, 5)) AS ZIP
+        , MIN(ZC_COUNTY_NAME) AS COUNTY
+        ,LEFT(COALESCE (PATIENT.ADD_LINE_1, '')
+            || COALESCE(PATIENT.ADD_LINE_2, '')
+            || COALESCE(PATIENT.CITY, '')
+            || COALESCE(LEFT(ZC_STATE_ABBR, 2), '')
+            || COALESCE(PATIENT.ZIP, '')
+            || COALESCE(ZC_COUNTY.COUNTY_C, ''), 50)
+        AS LOCATION_SOURCE_VALUE
+
+    FROM {{ref('PATIENT_DRIVER')}} AS PATIENT_DRIVER
+        INNER JOIN {{ ref('PATIENT_stg')}}	as PATIENT
+            ON PATIENT.PAT_ID = PATIENT_DRIVER.EHR_PATIENT_ID
+        LEFT OUTER JOIN {{ ref('ZC_STATE_stg')}} AS ZC_STATE
+            ON PATIENT.STATE_C = ZC_STATE.STATE_C
+        LEFT OUTER JOIN {{ ref('ZC_COUNTY_stg')}}	as ZC_COUNTY
+            ON PATIENT.COUNTY_C = ZC_COUNTY.COUNTY_C
+    GROUP BY LEFT(COALESCE(PATIENT.ADD_LINE_1, '')
+            || COALESCE(PATIENT.ADD_LINE_2, '')
+            || COALESCE(PATIENT.CITY, '')
+            || COALESCE(LEFT(ZC_STATE_ABBR, 2), '')
+            || COALESCE(PATIENT.ZIP, '')
+            || COALESCE(ZC_COUNTY.COUNTY_C, ''), 50)
+

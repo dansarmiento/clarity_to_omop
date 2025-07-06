@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: OR_LOG_VIRTUAL_stg
+    description: No description available
+    columns:
+      - name: LOG_ID
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ACT_START_OTS_DTTM
+        description: This is the actual start time of the case for on time starts based on system or location settings.

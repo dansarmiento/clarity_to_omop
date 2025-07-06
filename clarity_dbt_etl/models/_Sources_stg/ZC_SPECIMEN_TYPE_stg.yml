@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_SPECIMEN_TYPE_stg
+    description: This table stores possible options for specimen type.
+    columns:
+      - name: SPECIMEN_TYPE_C
+        description: 	The category number for the specimen type. 
+        tests:
+          - unique
+          - not_null
+      - name: ZC_SPECIMEN_TYPE_NAME
+        description: UPPER("NAME") The name given to this category item.

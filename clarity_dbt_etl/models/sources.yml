@@ -1,0 +1,182 @@
+version: 2
+# We will verify all of the referential integrity of our TPC-H source
+sources:
+  - name: OMOP
+    schema: OMOP
+    database: CARE_RES_OMOP_GEN_WKSP
+    tables:
+      - name: CONCEPT
+      - name: SOURCE_TO_CONCEPT_MAP
+      - name: CONCEPT_ANCESTOR
+      - name: CONCEPT_RELATIONSHIP
+      - name: FACT_RELATIONSHIP
+      - name: VOCABULARY
+
+  - name: OMOP_QA
+    schema: OMOP_QA
+    database: CARE_RES_OMOP_GEN_WKSP
+    tables:
+      - name: QA_LOG_HISTORY_DBT
+
+
+  - name: OMOP_PROD
+    schema: OMOP
+    database: SH_OMOP_DB_PROD
+    tables:
+      - name: AOU_DRIVER_PROD
+      - name: ALLOFUSPARTICIPANTS
+
+  - name: CLARITY
+    schema: DBO
+    database: CARE_BRONZE_CLARITY_PROD
+    tables:
+      - name: ALLERGY
+      - name: AN_HSB_LINK_INFO
+      - name: BLOOD_ADMIN_INFO
+      - name: CLARITY_ADT
+      - name: CLARITY_DEP
+      - name: CLARITY_EAP
+      - name: CLARITY_EDG
+      - name: CLARITY_EMP
+      - name: CLARITY_IMMUNZATN
+      - name: CLARITY_LOC
+      - name: CLARITY_MEDICATION
+      - name: CLARITY_MOD
+      - name: CLARITY_POS
+      - name: CLARITY_PRC
+      - name: CLARITY_SA
+      - name: CLARITY_SER
+      - name: CLARITY_SER_2
+      - name: CLARITY_UCL
+      - name: CLARITY_TDL_TRAN
+      - name: CL_COST_CNTR
+      - name: CL_ELG
+      - name: CL_UB_REV_CODE
+      - name: CONCEPT_MAPPED
+      - name: D_PROV_PRIMARY_HIERARCHY
+      - name: DELIVERY_ANES_MTHD
+      - name: DELIVERY_LIV_STS
+      - name: EDG_CURRENT_ICD10
+      - name: EDG_CURRENT_ICD9
+      - name: EXTERNAL_CNCPT_MAP
+      - name: EPISODE
+      - name: F_AN_RECORD_SUMMARY
+      - name: F_RX_UCL
+      - name: HNO_INFO
+      - name: HNO_NOTE_TEXT
+      - name: HSC_SPEC_INFO
+      - name: HSD_BASE_CLASS_MAP
+      - name: HSP_ACCOUNT
+      - name: HSP_ACCT_ADMIT_DX
+      - name: HSP_ACCT_DX_LIST
+      - name: HSP_ACCT_PX_LIST
+      - name: HSP_ATND_PROV
+      - name: IDENTITY_ID
+      - name: IMMUNE
+      - name: IP_DATA_STORE
+      - name: IP_FLO_GP_DATA
+      - name: IP_FLWSHT_MEAS
+      - name: IP_FLWSHT_REC
+      - name: IP_LDA_NOADDSINGLE
+      - name: LINKED_CHARGEABLES
+      - name: LINKED_PERFORMABLE
+      - name: LNC_DB_MAIN
+      - name: MAR_ADMIN_INFO
+      - name: NOTE_ENC_INFO
+      - name: OB_HSB_DELIVERY
+      - name: OB_HSB_DEL_INDUCT
+      - name: OB_HSB_DEL_LACERAT
+      - name: OB_HSB_DEL_EPISIO
+      - name: OB_HSB_DEL_AUGMENT
+      - name: OB_HSB_DEL_RIPETYP
+      - name: ORDER_ATTRIBUTE
+      - name: ORDER_DISP_INFO
+      - name: ORDER_DISP_MEDS
+      - name: ORDER_DX_PROC
+      - name: ORDER_INSTANTIATED
+      - name: ORDER_MED
+      - name: ORDER_MED_SIG
+      - name: ORDER_MED_CHARGE
+      - name: ORDER_METRICS
+      - name: ORDER_PROC
+      - name: ORDER_PROC_2
+      - name: ORDER_RESULTS
+      - name: OR_LOG
+      - name: OR_LOG_ALL_PROC
+      - name: OR_LOG_ALL_SURG
+      - name: OR_LOG_VIRTUAL
+      - name: OR_OPE_PROC_CODE
+      - name: PATIENT
+      - name: PATIENT_3
+      - name: PATIENT_RACE
+      - name: PAT_ALLERGIES
+      - name: PAT_ENC
+      - name: PAT_ENC_2
+      - name: PAT_ENC_DX
+      - name: PAT_ENC_HSP
+      - name: PAT_ENC_LOA
+      - name: PAT_EPISODE
+      - name: PAT_OR_ADM_LINK
+      - name: PROBLEM_LIST
+      - name: PROBLEM_LIST_HX
+      - name: RXNORM_CODES
+      - name: RX_NDC
+      - name: RX_NDC_STATUS
+      - name: RX_CHM
+      - name: RX_CHG
+      - name: SNOMED_CONCEPT
+      - name: SNOMED_HIERARCHY
+      - name: SPEC_DB_MAIN
+      - name: VALID_PATIENT
+      - name: UCL_NDC_CODES
+      - name: V_RX_CHARGES
+      - name: ZC_ACCT_BASECLS_HA
+      - name: ZC_ADMIN_ROUTE
+      - name: ZC_ADM_SOURCE
+      - name: ZC_APPT_STATUS
+      - name: ZC_CALCULATED_ENC_STAT
+      - name: ZC_CHARGE_METHOD
+      - name: ZC_COUNTY
+      - name: ZC_DISCH_DISP
+      - name: ZC_DISP_ENC_TYPE
+      - name: ZC_ED_DISPOSITION
+      - name: ZC_ETHNIC_GROUP
+      - name: ZC_LAB_STATUS
+      - name: ZC_MAR_RSLT
+      - name: ZC_MAR_RSN
+      - name: ZC_MED_UNIT
+      - name: ZC_NOTE_TYPE_IP
+      - name: ZC_NDC_UNITS
+      - name: ZC_OB_DEL_INDUCT
+      - name: ZC_OB_DEL_CERVRIPE
+      - name: ZC_OB_DEL_AUGMENT
+      - name: ZC_OB_DEL_EPISIO
+      - name: ZC_OB_DEL_LACER
+      - name: ZC_OB_HX_ANESTH
+      - name: ZC_ORDER_CLASS
+      - name: ZC_ORDER_STATUS
+      - name: ZC_ORDER_TYPE
+      - name: ZC_OR_STATUS
+      - name: ZC_PACK_DESC
+      - name: ZC_PATIENT_RACE
+      - name: ZC_PAT_CLASS
+      - name: ZC_PAT_SERVICE
+      - name: ZC_PAT_STATUS
+      - name: ZC_PHARM_CLASS
+      - name: ZC_PHARM_SUBCLASS
+      - name: ZC_RESULT_FLAG
+      - name: ZC_RESULT_STATUS
+      - name: ZC_ROUTE
+      - name: ZC_RSN_FOR_DISCON
+      - name: ZC_RXNORM_TERM_TYPE
+      - name: ZC_SEX
+      - name: ZC_SPECIALTY
+      - name: ZC_SPECIMEN_TYPE
+      - name: ZC_SPECIMEN_UNIT
+      - name: ZC_SPEC_SOURCE
+      - name: ZC_STATE
+      - name: ZC_SYSTEM_FLAG
+      - name: ZC_VAL_TYPE
+      - name: ZC_POS_TYPE
+
+

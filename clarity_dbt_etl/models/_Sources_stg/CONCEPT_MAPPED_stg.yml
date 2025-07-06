@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: CONCEPT_MAPPED_stg
+    description: The CONCEPT_MAPPED table stores the Concept Identifier of the SNOMED concept or SmartData Identifier (SDI) of the SmartData element referenced by mappings as well as the type of mapping associated with each concept-to-entity link. The mapped entities are given in the EXTERNAL_CNCPT_MAP table
+    columns:
+      - name: MAPPING_ID
+        description: 	The unique identifier (.1 item) for the mapping record.
+      - name: LINE
+        description: The line number for the information associated with this record. Multiple pieces of information can be associated with this record
+      - name: CONCEPT_ID
+        description: 	The Concept Identifier of the SNOMED concept or SmartData Identifier (SDI) of the SmartData element referenced by the current row's mapping.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - MAPPING_ID
+            - LINE

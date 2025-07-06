@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: HSP_ACCT_DX_LIST_stg
+    description: This table contains hospital account final diagnosis list information from the Hospital Accounts Receivable (HAR) master file
+    columns:
+      - name: HSP_ACCOUNT_ID
+        description: The ID number of a hospital account.
+      - name: LINE
+        description: The line number in the results of a query. Since multiple final ICD diagnoses can be stored in one hospital account, each diagnosis will have a unique line number. The record associated with line 1 represents the principal final coded diagnosis.
+      - name: DX_ID
+        description: The system ID number of a final diagnosis code stored in the hospital account.
+      - name: FINAL_DX_SOI_C
+        description: Stores the final diagnosis severity of illness
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - HSP_ACCOUNT_ID
+            - LINE

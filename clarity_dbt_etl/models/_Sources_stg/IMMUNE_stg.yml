@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: IMMUNE_stg
+    description: The IMMUNE table contains data for immunizations ordered through clinical system.
+    columns:
+      - name: 	IMMUNE_ID
+        description: The unique ID of the immunization record in your system production system.e
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: PAT_ID
+        description: The unique ID assigned to the patient record.
+
+      - name: IMMUNZATN_ID
+        description: The ID of the immunization record that corresponds to the type of immunization given to this patient.
+
+      - name: IMMUNE_DATE
+        description: 	The date the immunization was administered in calendar format.
+
+      - name: IMMUNIZATION_TIME
+        description: Column that stores the time when a given immunization was administered.
+
+      - name: DOSE
+        description: The immunization dosage.
+
+      - name: ROUTE_C
+        description: The category value associated with the route of the immunization, such as oral, intramuscular, or intradermal.
+
+      - name: LOT
+        description: The lot number of the vaccine.
+
+      - name: MED_ADMIN_COMMENT
+        description: Free text comment regarding the administration of this immunization.
+
+      - name: IMM_CSN
+        description: 	This column contains the CSN (contact serial number) for the immunization.
+
+      - name: IMMNZTN_DOSE_UNIT_C
+        description: Immunization dose unit.
+
+      - name: NDC_NUM_ID
+        description: Store the NDC number ID associated with the administration
+
+      - name: ORDER_ID
+        description: Order ID for immunization ordered.
+
+      - name: IMMNZTN_STATUS_C
+        description: The category value associated with "Given" if the immunization has been administered, "Deleted" if the immunization has been deleted from the administration history, "Incomplete" if the item has been ordered but not administered and a status of "Deferred" if the immunization has been deferred.
+
+
+

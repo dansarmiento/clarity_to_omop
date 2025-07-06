@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: IP_FLWSHT_REC_stg
+    description: This table contains linking information associated with flowsheet records.
+    columns:
+      - name: FSD_ID
+        description: The unique ID for the flowsheet data record.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: INPATIENT_DATA_ID
+        description: The unique ID of the inpatient record associated with this flowsheet reading.

@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_LAB_STATUS_stg
+    description: This table contains the category information for lab statuses.
+    columns:
+      - name: LAB_STATUS_C
+        description: 	This is the lab status code.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_LAB_STATUS_NAME
+        description: UPPER("NAME") The name given to this category item.

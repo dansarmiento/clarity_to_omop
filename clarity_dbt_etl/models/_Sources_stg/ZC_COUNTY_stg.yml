@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_COUNTY_stg
+    description: This table contains the category information for counties.
+    columns:
+      - name: COUNTY_C
+        description: 	This is the county code.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_COUNTY_NAME
+        description: UPPER("NAME") The name given to this category item.

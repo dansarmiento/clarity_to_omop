@@ -1,0 +1,15 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__T_SNO_SOURCE
+SELECT CONCEPT_ID
+    ,CONCEPT_CODE
+    ,REPLACE(CONCEPT_NAME, '"', '') AS CONCEPT_NAME
+
+FROM {{ref('CONCEPT_stg')}} AS C
+WHERE C.VOCABULARY_ID IN ('SNOMED')
+    AND (
+        C.INVALID_REASON IS NULL
+        OR C.INVALID_REASON = ''
+        )
+    AND UPPER(C.DOMAIN_ID) = 'CONDITION'
+--END cte__T_SNO_SOURCE
+--

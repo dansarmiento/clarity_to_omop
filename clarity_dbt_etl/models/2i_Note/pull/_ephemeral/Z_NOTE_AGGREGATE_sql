@@ -1,0 +1,51 @@
+--
+{{
+    config(
+        materialized='incremental',
+        schema = "OMOP_CLARITY",
+        transient = false
+    )
+}}
+--BEGIN cte__Z_NOTE_AGGREGATE
+-- stitches NOTE_TEXT of split notes into a single text field
+SELECT PERSON_ID
+    ,PAT_ID
+ 	,PAT_ENC_CSN_ID
+	,ENTRY_INSTANT_DTTM
+	,ZC_NOTE_TYPE_IP_NAME
+	,IP_NOTE_TYPE_C
+	,AMB_NOTE_YN
+	,NOTE_ID
+	,CONTACT_DATE_REAL
+	,NOTE_CSN_ID
+	,CONTACT_DATE
+--	,CM_CT_OWNER_ID
+--	,CHRON_ITEM_NUM
+    ,1 AS LINE
+    ,LISTAGG(NOTE_TEXT) WITHIN GROUP (ORDER BY LINE) AS NOTE_TEXT
+--	,IS_ARCHIVED_YN
+FROM
+{{ref('Z_NOTE_LOOKUP')}} AS Z_NOTE_LOOKUP
+
+{% if is_incremental() %}
+--WHERE NOTE_CSN_ID > (SELECT MAX(NOTE_CSN_ID) FROM {{this}} t1) --Would only work if NOTE_CSN_ID's only increase. If a new CSN appeared that was less than the max(CSN)
+WHERE NOT EXISTS (SELECT NULL FROM {{this}} t2 WHERE t2.NOTE_ID = Z_NOTE_LOOKUP.NOTE_ID ) --Essentially joining to this table, if NOTE_CSN_ID already exists
+{% endif %}
+
+GROUP BY
+    PERSON_ID
+    ,PAT_ID
+ 	,PAT_ENC_CSN_ID
+	,ENTRY_INSTANT_DTTM
+	,ZC_NOTE_TYPE_IP_NAME
+	,IP_NOTE_TYPE_C
+	,AMB_NOTE_YN
+	,NOTE_ID
+	,CONTACT_DATE_REAL
+	,NOTE_CSN_ID
+	,CONTACT_DATE
+--	,CM_CT_OWNER_ID
+--	,CHRON_ITEM_NUM
+--	,IS_ARCHIVED_YN
+--END cte__Z_NOTE_AGGREGATE
+

@@ -1,0 +1,14 @@
+
+--BEGIN cte__T_POS
+    SELECT *
+    FROM
+    (
+        SELECT *
+        -- PCP PHYSICIAN POINTOFSERVICE
+        FROM CARE_RES_OMOP_DEV2_WKSP.OMOP_PULL.PCP_PHYSICIAN_POINTOFSERVICE
+        UNION
+        SELECT *
+        --Encounter physician PointOfService
+        FROM   CARE_RES_OMOP_DEV2_WKSP.OMOP_PULL.ENC_PHYSICIAN_POINTOFSERVICE
+    ) AS T_POS
+--END cte__T_POS

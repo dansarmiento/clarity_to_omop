@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: CLARITY_SER_stg
+    description: The CLARITY_SER table contains high-level information about your provider records. These records may be caregivers, resources, classes, devices, and modalities.
+    columns:
+      - name: PROV_ID
+        description: The unique ID assigned to the provider record. 
+        tests:
+          - unique
+          - not_null
+      - name: PROV_NAME
+        description: UPPER(PROV_NAME) The name of the service provider. This item may be hidden in a public view of the CLARITY_SER table.
+      - name: PROV_TYPE
+        description: UPPER(PROV_TYPE) The provider type for the provider or resource. This is extracted as the category title.
+      - name: SEX_C
+        description: The category number corresponding to the sex of the provider.
+      - name: BIRTH_DATE
+        description: The date the provider was born.
+      - name: DEA_NUMBER
+        description: The provider's DEA number for prescribing controlled medications.
+

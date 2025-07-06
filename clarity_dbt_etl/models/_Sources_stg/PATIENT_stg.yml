@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: PATIENT_stg
+    description: The PATIENT table contains one record for each patient in your system. The data contained in each record consists of demographics, PCP and primary location information, registration information, and other information.
+    columns:
+      - name: PAT_ID
+        description: 	The unique ID of the patient record for this row. This column is frequently used by other tables to link to PATIENT.
+        tests:
+          - unique
+          - not_null
+      - name: BIRTH_DATE
+        description: The date on which the patient was born.
+      - name: CUR_PCP_PROV_ID
+        description: The unique ID of the provider record for the patient?s current General Primary Care Provider as of the enterprise reporting extract. This ID may be encrypted.
+      - name: CUR_PRIM_LOC_ID
+        description: The unique ID of the location record for the patient?s Primary Location as of the time of the enterprise reporting extract. This column is retrieved from the item Primary Location
+      - name: SEX_C
+        description: The category number corresponding to the patient's sex.
+      - name: ADD_LINE_1
+        description: 	This column, although not deprecated, should no longer be used. Instead you should use the column ADDRESS (EPT 50) in table PAT_ADDRESS. Patient addresses can contain an unlimited number of lines. Previously you could only access the first two lines with the columns PATIENT.ADD_LINE_1 and PATIENT.ADD_LINE_2. Now, there is a new table, called PAT_ADDRESS, which allows you to get all lines of the patient's permanent address. We have chosen not to deprecate PATIENT.ADD_LINE_1 and PATIENT.ADD_LINE_2 because doing so would break any custom reports that use these columns. To use the new column, join column PATIENT.PAT_ID to table PAT_ADDRESS on column PAT_ID and get the ADDRESS value and also the LINE value. Each PAT_ID value represents a different patient, and each LINE value represents a different line of that patient's address.
+      - name: ADD_LINE_2
+        description: 	This column, although not deprecated, should no longer be used. Instead you should use the column ADDRESS (EPT 50) in table PAT_ADDRESS. Patient addresses can contain an unlimited number of lines. Previously you could only access the first two lines with the columns PATIENT.ADD_LINE_1 and PATIENT.ADD_LINE_2. Now, there is a new table, called PAT_ADDRESS, which allows you to get all lines of the patient's permanent address. We have chosen not to deprecate PATIENT.ADD_LINE_1 and PATIENT.ADD_LINE_2 because doing so would break any custom reports that use these columns. To use the new column, join column PATIENT.PAT_ID to table PAT_ADDRESS on column PAT_ID and get the ADDRESS value and also the LINE value. Each PAT_ID value represents a different patient, and each LINE value represents a different line of that patient's address.
+      - name: CITY
+        description: The city in which the patient lives
+      - name: STATE_C
+        description: 	The category value corresponding to the state in which the patient lives
+      - name: COUNTY_C
+        description: The category value corresponding to the county in which the patient lives
+      - name: ZIP
+        description: The ZIP Code area in which the patient lives
+      - name: ETHNIC_GROUP_C
+        description: The category value associated with the patient's ethnic background.
+      - name: PAT_STATUS_C
+        description: The category value of the patient status. Possible statuses include alive and deceased. Note that there are many patient creation workflows that do not populate this item so many alive patients could have blank statuses. If using this column to report on the Alive or Deceased status of a patient population use PATIENT_4.PAT_LIVING_STAT_C instead.
+      - name: DEATH_DATE
+        description: The date of death for the patient

@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: CL_ELG_stg
+    description: This table contains information on allergens.
+    columns:
+      - name: 	ALLERGEN_ID
+        description: The ID of the allergen record.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ALLERGEN_NAME
+        description: UPPER("ALLERGEN_NAME") The name given to this category item.

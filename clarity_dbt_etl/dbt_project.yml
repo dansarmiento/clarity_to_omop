@@ -1,0 +1,258 @@
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'omop_research'
+version: '1.0.0'
+config-version: 2
+
+dbt-cloud:
+    project-id: 314925
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'omop_research'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "logs"
+  - "dbt_packages"
+
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+# In this example config, we tell dbt to build all models in the example/ directory
+# as tables. These settings can be overridden in the individual model files
+# using the `{{ config(...) }}` macro.
+models:
+  omop_research:
+    _Sources_stg:
+      +materialized: ephemeral
+      +schema: OMOP_CLARITY
+    1a_location:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    1b_care_site:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    1c_provider:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    1d_person:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    1e_death:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    1f_specimen:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+#    1g_fact_relationship:
+#      +enabled: false        #if uncommented, folder is DISABLED
+#      pull:
+#        +materialized: view
+#        +schema: OMOP_PULL
+#      stage:
+#        +materialized: view
+#        +schema: OMOP_STAGE
+#      write:
+#        +materialized: table
+#        +schema: OMOP
+    2c_Visit_detail:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2c_Visit_occurrence:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2d_Condition_occurrence:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2e_Measurement:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2f_Drug_Exposure:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2g_Procedure_occurrence:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2h_Observation:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2i_Note:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    2j_Device_exposure:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      pull:
+        +materialized: view
+        +schema: OMOP_PULL
+      stage:
+        +materialized: view
+        +schema: OMOP_STAGE
+      write:
+        +materialized: table
+        +schema: OMOP
+    3_derived_tables:
+#      +enabled: false        #if uncommented, folder is DISABLED
+      +materialized: table
+      +schema: OMOP
+#    3_PROD_Export:
+#      pull:
+#        +materialized: view
+#        +schema: OMOP_PULL
+#      stage:
+#        +materialized: view
+#        +schema: OMOP_STAGE
+#      write:
+#        +materialized: table
+#        +schema: OMOP
+    4_AOU_Export:
+      +materialized: view
+      +schema: OMOP
+      +enabled: false        #if uncommented, folder is DISABLED
+    5_Curation:
+      +materialized: table
+      +schema: OMOP_QA
+#      +enabled: false        #if uncommented, folder is DISABLED
+    60_Validation:
+      +materialized: view
+      +schema: OMOP_CS
+#      +enabled: false        #if uncommented, folder is DISABLED
+
+# Loads the Participants List
+#on-run-start: "{{ import_participants() }}"
+
+on-run-end:
+  - "PUT file://./logs/dbt.log @DBT_LOG_FILE"
+
+
+## Global variables:
+vars:
+  import_vocabulary_stage_schema: "OMOP"
+  import_vocabulary_stage_name: "google_vocabulary_to_snowflake"
+#  export_stage_schema: "CDM"
+#  export_stage_name: "AOU_EXPORT"
+

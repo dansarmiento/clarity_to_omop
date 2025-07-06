@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: ORDER_MED_stg
+    description: The ORDER_MED table enables you to report on medications ordered in EpicCare (prescriptions).
+    columns:
+      - name: ORDER_MED_ID
+        description: The unique ID of the order record associated with this medication order.
+        tests:
+          - unique
+          - not_null        
+      - name: MEDICATION_ID
+        description: The unique ID of the order record associated with this medication order.
+      - name: AUTHRZING_PROV_ID
+        description: The unique ID of the provider who has prescribed or authorized the medication order.
+      - name: ORDER_END_TIME
+        description: 	The date and time when the medication order is scheduled to end. 
+      - name: ORDER_START_TIME
+        description: The date and time when the medication order is to start.
+      - name: RSN_FOR_DISCON_C
+        description: 	The category number for the reason a prescription has been discontinued.
+      - name: MED_ROUTE_C
+        description: The category number for the route of administration of a medication.
+      - name: ORDER_STATUS_C
+        description: The category number for the current status of an order.
+      - name: END_DATE
+        description: 	The date when the medication order is to end.
+      - name: REFILLS
+        description: The number of refills allowed for this prescription as entered by the user.
+      - name: QUANTITY
+        description: The quantity of the prescription being dispensed as entered by the user.
+      - name: PAT_ENC_CSN_ID
+        description: The unique contact serial number (CSN) for the patient contact associated with this medication order.
+      - name: HV_DOSE_UNIT_C
+        description: The category number for the dosage unit of a medication.
+      - name: SIG
+        description: Deprecated In table ORDER_MED, the column SIG has been deprecated. This column has been replaced by column SIG_TEXT in the table ORDER_MED_SIG. To look up the deprecated column's value after the Clarity Compass upgrade, use the column SIG_TEXT value. The SIG_TEXT column has been expanded to hold more characters in the new table ORDER_MED_SIG.
+        

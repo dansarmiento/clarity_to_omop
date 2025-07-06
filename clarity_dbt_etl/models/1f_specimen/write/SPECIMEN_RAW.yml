@@ -1,0 +1,78 @@
+version: 2
+
+models:
+  - name: SPECIMEN
+    columns:
+      - name: SPECIMEN_ID
+        description: Unique identifier for each specimen.
+        tests:
+          - unique
+          - not_null
+
+      - name: PERSON_ID
+        description: The person from whom the specimen is collected.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PERSON_RAW')
+              field: PERSON_ID
+
+      - name: SPECIMEN_CONCEPT_ID
+        description: The standard CONCEPT_ID that the SPECIMEN_SOURCE_VALUE maps to in the specimen domain.
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: SPECIMEN_TYPE_CONCEPT_ID
+        description: Put the source of the specimen record, as in an EHR system.
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: specimen_date
+        description: The date the specimen was collected.
+        tests:
+          - not_null
+
+      - name: specimen_datetime
+      - name: quantity
+        description: The amount of specimen collected from the person.
+
+      - name: UNIT_CONCEPT_ID
+        description: The unit for the quantity of the specimen; Map the UNIT_SOURCE_VALUE to a Standard Concept in the Unit domain.
+        tests:
+          # - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: ANATOMIC_SITE_CONCEPT_ID
+        description: This is the site on the body where the specimen is from; Map the ANATOMIC_SITE_SOURCE_VALUE to a Standard Concept in the Spec Anatomic Site domain. This should be coded at the lowest level of granularity.
+        tests:
+        #   - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: DISEASE_STATUS_CONCEPT_ID
+        tests:
+          # - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: specimen_source_id
+        description: This is the identifier for the specimen from the source system.
+
+      - name: specimen_source_value
+      - name: unit_source_value
+        description: This unit for the quantity of the specimen, as represented in the source.
+
+      - name: anatomic_site_source_value
+        description: This is the site on the body where the specimen was taken from, as represented in the source.
+
+      - name: disease_status_source_value

@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: OR_LOG_ALL_SURG_stg
+    description: The OR_LOG_ALL_SURG table contains OR management system log surgeons
+    columns:
+      - name: LOG_ID
+        description: 	The unique ID of the surgical log which refers to the surgeon.
+      - name: LINE
+        description: 	The number of the line of the surgeon in this surgical log..
+      - name: SURG_ID
+        description: The unique ID of the surgeon.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - LOG_ID
+            - LINE

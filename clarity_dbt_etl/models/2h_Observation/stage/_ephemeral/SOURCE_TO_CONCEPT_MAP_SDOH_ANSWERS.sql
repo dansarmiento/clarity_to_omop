@@ -1,0 +1,7 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__SOURCE_TO_CONCEPT_MAP_SDOH_ANSWERS
+    SELECT *
+    FROM {{ref('SOURCE_TO_CONCEPT_MAP_stg')}}
+    WHERE SOURCE_VOCABULARY_ID = 'SH_SDOH_ANSWERS'
+--END cte__SOURCE_TO_CONCEPT_MAP_SDOH_ANSWERS
+--

@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select CONDITION_CONCEPT_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.CONDITION_ERA
+where CONDITION_CONCEPT_ID is null
+
+

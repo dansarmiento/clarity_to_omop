@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: LNC_DB_MAIN_stg
+    description: This is the primary table for Logical Observation Identifiers Names and Codes (LOINC?) information.
+    columns:
+      - name: RECORD_ID
+        description: 	The unique identifier for the Logical Observation Identifiers Names and Codes (LOINC?) code.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: LNC_CODE
+        description: UPPER(LNC_CODE)   TThe unique code for the Logical Observation Identifiers Names and Codes (LOINC?) code.
+      - name: LNC_COMPON
+        description: UPPER(LNC_COMPON) 	The component/analyte value of the Logical Observation Identifiers Names and Codes (LOINC?) code.
+

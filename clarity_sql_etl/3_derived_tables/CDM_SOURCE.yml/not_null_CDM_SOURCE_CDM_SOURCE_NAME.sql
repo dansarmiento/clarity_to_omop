@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select CDM_SOURCE_NAME
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.CDM_SOURCE
+where CDM_SOURCE_NAME is null
+
+

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: PAT_ENC_2_stg
+    description: This table supplements the PAT_ENC table. It contains additional information related to patient encounters or appointments.
+    columns:
+      - name: PAT_ENC_CSN_ID
+        description: The unique system identifier of the patient encounter. Contact serial number is unique across all patients and all contacts.
+        tests:
+          - unique
+          - not_null
+      - name: PAT_ID
+        description: The unique system identifier of the patient record (EPT dot one).
+      - name: IP_DOC_CONTACT_CSN
+        description: For Hospital Outpatient Visit (HOV) encounters, this column stores the unique contact serial number for the patient contact which is used for clinical documentation. This can be set for appointment contacts if they are not converted to HOVs

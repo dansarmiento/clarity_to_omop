@@ -1,0 +1,15 @@
+  {{ config(materialized='ephemeral') }}
+--BEGIN cte__T_ICD_SOURCE_OBSERVATION
+    SELECT CONCEPT_ID
+            ,CONCEPT_CODE
+            ,CONCEPT_NAME
+
+    FROM {{ref('CONCEPT_stg')}} AS C
+    WHERE UPPER(C.VOCABULARY_ID) IN ('ICD9CM','ICD10CM')
+        AND (
+                C.INVALID_REASON IS NULL
+                OR C.INVALID_REASON = ''
+                )
+        AND UPPER(C.DOMAIN_ID) = 'OBSERVATION'
+--END cte__T_ICD_SOURCE_OBSERVATION
+--

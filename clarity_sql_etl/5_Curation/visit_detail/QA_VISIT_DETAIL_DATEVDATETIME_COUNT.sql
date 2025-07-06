@@ -1,0 +1,74 @@
+/*********************************************************
+Script Name: QA_VISIT_DETAIL_DATEVDATETIME_COUNT
+Author: Roger J Carlson - Corewell Health
+Date: June 2025
+*********************************************************/
+
+WITH DATEVDATETIME_COUNT AS (
+    SELECT 
+        'VISIT_DETAIL_START_DATE' AS METRIC_FIELD, 
+        'DATEVDATETIME' AS QA_METRIC, 
+        'WARNING' AS ERROR_TYPE,
+        SUM(CASE WHEN (VISIT_DETAIL_START_DATE <> CAST(VISIT_DETAIL_START_DATE AS DATE)) 
+            THEN 1 ELSE 0 END) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_DETAIL_RAW AS T1
+
+    UNION ALL
+
+    SELECT 
+        'VISIT_DETAIL_END_DATE' AS METRIC_FIELD, 
+        'DATEVDATETIME' AS QA_METRIC, 
+        'WARNING' AS ERROR_TYPE,
+        SUM(CASE WHEN (VISIT_DETAIL_END_DATE <> CAST(VISIT_DETAIL_END_DATETIME AS DATE)) 
+            THEN 1 ELSE 0 END) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_DETAIL_RAW AS T1
+
+    UNION ALL
+
+    SELECT 
+        'VISIT_DETAIL_END_DATE' AS METRIC_FIELD, 
+        'NULL_END_DATE' AS QA_METRIC, 
+        'FATAL' AS ERROR_TYPE,
+        SUM(CASE WHEN (VISIT_DETAIL_END_DATE IS NULL) THEN 1 ELSE 0 END) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_DETAIL_RAW AS T1
+)
+
+SELECT 
+    CAST(GETDATE() AS DATE) AS RUN_DATE,
+    'VISIT_DETAIL' AS STANDARD_DATA_TABLE,
+    QA_METRIC AS QA_METRIC,
+    METRIC_FIELD AS METRIC_FIELD,
+    COALESCE(SUM(CNT),0) AS QA_ERRORS,
+    CASE WHEN SUM(CNT) IS NOT NULL AND SUM(CNT) <> 0 
+        THEN ERROR_TYPE ELSE NULL END AS ERROR_TYPE,
+    (SELECT COUNT(*) AS NUM_ROWS 
+     FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_DETAIL_RAW) AS TOTAL_RECORDS,
+    (SELECT COUNT(*) AS NUM_ROWS 
+     FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_DETAIL) AS TOTAL_RECORDS_CLEAN
+FROM DATEVDATETIME_COUNT
+GROUP BY METRIC_FIELD, QA_METRIC, ERROR_TYPE;
+
+/*********************************************************
+COLUMN DESCRIPTIONS:
+------------------
+RUN_DATE: Date when the QA check was performed
+STANDARD_DATA_TABLE: Name of the table being analyzed
+QA_METRIC: Type of quality check being performed
+METRIC_FIELD: Specific field being checked
+QA_ERRORS: Count of errors found
+ERROR_TYPE: Severity of the error (WARNING or FATAL)
+TOTAL_RECORDS: Total number of records in raw table
+TOTAL_RECORDS_CLEAN: Total number of records in clean table
+
+LOGIC:
+------
+This script performs three QA checks on the VISIT_DETAIL table:
+1. Compares start date with datetime for mismatches
+2. Compares end date with datetime for mismatches
+3. Checks for null end dates
+
+LEGAL WARNING:
+-------------
+This code is provided "AS IS" without warranty of any kind.
+Use of this code is at your own risk and responsibility.
+*********************************************************/

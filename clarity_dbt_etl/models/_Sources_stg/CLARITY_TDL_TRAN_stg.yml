@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: CLARITY_TDL_TRAN_stg
+    description: No description available
+    columns:
+      - name: TDL_ID
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+
+      - name: DX_ONE_ID
+        description: The unique ID of the first diagnosis that is associated with the charge transaction. This is the primary diagnosis for the charge transaction.
+      - name: DX_TWO_ID
+        description: 	The unique ID of the second diagnosis that is associated with the charge transaction..
+      - name: DX_THREE_ID
+        description: The unique ID of the third diagnosis that is associated with the charge transaction..
+      - name: DX_FOUR_ID
+        description: The unique ID of the fourth diagnosis that is associated with the charge transaction..
+      - name: DX_FIVE_ID
+        description: The unique ID of the fifth diagnosis that is associated with the charge transaction..
+      - name: DX_SIX_ID
+        description: The unique ID of the sixth diagnosis that is associated with the charge transaction..
+      - name: ORIG_SERVICE_DATE
+        description: The service date of the transaction (TX_ID).
+      - name: TYPE
+        description: A numeric classification for the row in CLARITY_TDL_TRAN.
+      - name: INT_PAT_ID
+        description: 	The unique ID of the patient associated with this transaction (TX_ID
+      - name: PAT_ENC_CSN_ID
+        description: The unique contact serial number for this contact..
+      - name: MATCH_PROV_ID
+        description: The unique ID of the service provider of the matching transaction (MATCH_TRX_ID).
+
+
+
+

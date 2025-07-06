@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_PAT_CLASS_stg
+    description: No description available
+    columns:
+      - name: ADT_PAT_CLASS_C
+        description: 	No description available
+        tests:
+          - unique
+          - not_null
+      - name: ZC_PAT_CLASS_NAME
+        description: UPPER("NAME") The name given to this category item.

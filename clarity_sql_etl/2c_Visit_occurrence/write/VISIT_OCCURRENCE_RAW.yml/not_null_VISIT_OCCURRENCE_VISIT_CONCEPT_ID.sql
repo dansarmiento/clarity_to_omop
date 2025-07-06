@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select VISIT_CONCEPT_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_OCCURRENCE
+where VISIT_CONCEPT_ID is null
+
+

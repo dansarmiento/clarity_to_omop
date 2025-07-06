@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select VISIT_DETAIL_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_DETAIL
+where VISIT_DETAIL_ID is null
+
+

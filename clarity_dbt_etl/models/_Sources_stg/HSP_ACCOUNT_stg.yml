@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: HSP_ACCOUNT_stg
+    description: This table contains hospital account information from the Hospital Account (HAR) and Claim (CLM) master files.
+    columns:
+      - name: HSP_ACCOUNT_ID
+        description: 	This column stores the unique identifier for the hospital account
+        tests:
+          - unique
+          - not_null
+      - name: ADM_DATE_TIME
+        description: This column stores the admission date and time associated with the hospital account..
+      - name: DISCH_DATE_TIME
+        description: This column stores the discharge date and time associated with the hospital account..
+      - name: ATTENDING_PROV_ID
+        description: This column stores the unique identifier for the attending provider stored on the hospital account. See column PROV_ID in table HSP_ATND_PROV if coding has not been performed on this hospital account. Alternatively, see V_ARHB_HSP_ACCOUNT_ADDL_INFO for the calculated value for this column based on both hospital account and encounter data. 
+      - name: REFERRING_PROV_ID
+        description: 	The ID of a referring provider stored in the hospital account.

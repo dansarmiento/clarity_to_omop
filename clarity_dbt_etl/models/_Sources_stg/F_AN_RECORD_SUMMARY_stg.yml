@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: F_AN_RECORD_SUMMARY_stg
+    description: This derived fact table collects core information about anesthesia records into a standardized summary format. Each row uniquely represents an anesthesia record.
+    columns:
+      - name: AN_EPISODE_ID
+        description: 	The unique ID of the episode of care record.
+        tests:
+          - unique
+          - not_null         
+      - name: AN_52_ENC_CSN_ID
+        description: Stores the unique contact serial number for the 52-Anesthesia patient encounter associated with the anesthesia record.
+      - name: AN_53_ENC_CSN_ID
+        description: Stores the unique contact serial number for the 53-Anesthesia Event patient encounter associated with the anesthesia record..
+

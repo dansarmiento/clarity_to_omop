@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: NOTE_ENC_INFO_stg
+    description: This table contains information from overtime single-response items about General Use Notes (HNO) records
+    columns:
+      - name: CONTACT_SERIAL_NUM
+        description: 	The contact serial number (CSN) of the contact.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: NOTE_ID
+        description: 	The unique identifier for the note record.
+      - name: CONTACT_DATE_REAL
+        description: 	A unique, internal contact date in decimal format. The integer portion of the number indicates the date of the contact.
+      - name: ENTRY_INSTANT_DTTM
+        description: 	UTC formatted instant of entry for a note.
+

@@ -1,0 +1,98 @@
+version: 2
+
+models:
+
+  - name: PROCEDURE_OCCURRENCE
+    description: This table contains records of activities or processes ordered by, or carried out by, a healthcare provider on the patient with a diagnostic or therapeutic purpose.
+    columns:
+      - name: PROCEDURE_OCCURRENCE_ID
+        description: The unique key given to a procedure record for a person. Refer to the ETL for how duplicate procedures during the same visit were handled; Each instance of a procedure occurrence in the source data should be assigned this unique key. In some cases, a person can have multiple records of the same procedure within the same visit. It is valid to keep these duplicates and assign them individual, unique, PROCEDURE_OCCURRENCE_IDs, though it is up to the ETL how they should be handled.
+        tests:
+          - unique
+          - not_null
+
+      - name: PERSON_ID
+        description: The PERSON_ID of the PERSON for whom the procedure is recorded. This may be a system generated code.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PERSON_RAW')
+              field: PERSON_ID
+
+      - name: PROCEDURE_CONCEPT_ID
+        description: The PROCEDURE_CONCEPT_ID field is recommended for primary use in analyses, and must be used for network studies. This is the standard concept mapped from the source value which represents a procedure; The CONCEPT_ID that the PROCEDURE_SOURCE_VALUE maps to. Only records whose source values map to standard concepts with a domain of “Procedure” should go in this table
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: procedure_date
+        description: Use this date to determine the date the procedure occurred; If a procedure lasts more than a day, then it should be recorded as a separate record for each day the procedure occurred, this logic is in lieu of the procedure_end_date, which will be added in a future version of the CDM.
+        tests:
+          - not_null
+
+      - name: procedure_datetime
+        description: This is not required, though it is in v6. If a source does not specify datetime the convention is to set the time to midnight (00:00:0000)
+
+      - name: PROCEDURE_TYPE_CONCEPT_ID
+        description: This field can be used to determine the provenance of the Procedure record, as in whether the procedure was from an EHR system, insurance claim, registry, or other sources; Choose the PROCEDURE_TYPE_CONCEPT_ID that best represents the provenance of the record, for example whether it came from an EHR record or billing claim. If a procedure is recorded as an EHR encounter, the PROCEDURE_TYPE_CONCEPT would be ‘EHR encounter record’.
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: MODIFIER_CONCEPT_ID
+        description: The modifiers are intended to give additional information about the procedure but as of now the vocabulary is under review; It is up to the ETL to choose how to map modifiers if they exist in source data. These concepts are typically distinguished by ‘Modifier’ concept classes (e.g., ‘CPT4 Modifier’ as part of the ‘CPT4’ vocabulary). If there is more than one modifier on a record, one should be chosen that pertains to the procedure rather than provider.
+        tests:
+          # - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: quantity
+        description: If the quantity value is omitted, a single procedure is assumed; If a Procedure has a quantity of ‘0’ in the source, this should default to ‘1’ in the ETL. If there is a record in the source it can be assumed the exposure occurred at least once.
+
+      - name: PROVIDER_ID
+        description: The provider associated with the procedure record, e.g. the provider who performed the Procedure; The ETL may need to make a choice as to which PROVIDER_ID to put here. Based on what is available this may or may not be different than the provider associated with the overall VISIT_OCCURRENCE record, for example the admitting vs attending physician on an EHR record.
+        tests:
+          # - not_null:
+          #     config:
+          #       severity: warn
+          - relationships:
+              to: ref('PROVIDER_RAW')
+              field: PROVIDER_ID
+
+      - name: VISIT_OCCURRENCE_ID
+        description: The visit during which the procedure occurred; Depending on the structure of the source data, this may have to be determined based on dates. If a PROCEDURE_DATE occurs within the start and end date of a Visit it is a valid ETL choice to choose the VISIT_OCCURRENCE_ID from the Visit that subsumes it, even if not explicitly stated in the data. While not required, an attempt should be made to locate the VISIT_OCCURRENCE_ID of the PROCEDURE_OCCURRENCE record.
+        tests:
+          - not_null:
+              config:
+                severity: warn
+          - relationships:
+              to: ref('VISIT_OCCURRENCE')
+              field: VISIT_OCCURRENCE_ID
+
+      - name: VISIT_DETAIL_ID
+        description: The VISIT_DETAIL record during which the Procedure occurred. For example, if the Person was in the ICU at the time of the Procedure the VISIT_OCCURRENCE record would reflect the overall hospital stay and the VISIT_DETAIL record would reflect the ICU stay during the hospital visit; Same rules apply as for the VISIT_OCCURRENCE_ID.
+        # tests:
+        #   - not_null:
+        #       config:
+        #         severity: warn
+        # - relationships:
+        #     to: ref('VISIT_DETAIL')
+        #     field: VISIT_DETAIL_ID
+
+      - name: procedure_source_value
+        description: This field houses the verbatim value from the source data representing the procedure that occurred. For example, this could be an CPT4 or OPCS4 code; Use this value to look up the source concept id and then map the source concept id to a standard concept id.
+
+      - name: PROCEDURE_SOURCE_CONCEPT_ID
+        description: This is the concept representing the procedure source value and may not necessarily be standard. This field is discouraged from use in analysis because it is not required to contain Standard Concepts that are used across the OHDSI community, and should only be used when Standard Concepts do not adequately represent the source detail for the Procedure necessary for a given analytic use case. Consider using PROCEDURE_CONCEPT_ID instead to enable standardized analytics that can be consistent across the network; If the PROCEDURE_SOURCE_VALUE is coded in the source data using an OMOP supported vocabulary put the concept id representing the source value here.
+        tests:
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: modifier_source_value
+        description: The original modifier code from the source is stored here for reference.

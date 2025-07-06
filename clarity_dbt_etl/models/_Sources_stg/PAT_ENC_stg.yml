@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: PAT_ENC_stg
+    description: 	The patient encounter table contains one record for each patient encounter in your system. By default, this table does not contain Registration or PCP/Clinic Change contacts (encounter types 1 and 31). It does contain all appointments, office visits, telephone encounters, and other types of encounters. The primary key for the patient encounter table is PAT_ENC_CSN_ID.
+    columns:
+      - name: PAT_ENC_CSN_ID
+        description: A unique serial number for this encounter. This number is unique across all patients and encounters in the system.
+        tests:
+          - unique
+          - not_null
+      - name: PAT_ID
+        description: 	The unique ID assigned to the patient record. This ID may be encrypted if you have elected to use enterprise reporting?s encryption utility.
+      - name: DEPARTMENT_ID
+        description: 	The ID of the department for the encounter. If there are multiple departments for the encounter, this is the ID of the first department in the list.
+      - name: PRIMARY_LOC_ID
+        description: The unique ID of the patient's primary location as of the contact date of the encounter. Note- This may not be the same as the patient's current primary location
+      - name: VISIT_PROV_ID
+        description: The unique ID for the visit provider associated with this encounter. In cases where there are multiple providers for one encounter, this is the ID of the first provider in the list. This item may be NULL if there is no provider for this encounter. This ID may be encrypted.
+      - name: PCP_PROV_ID
+        description: The unique ID of the provider record for the patient?s General Primary Care Provider as of the date of the encounter.
+      - name: ENC_TYPE_C
+        description: The encounter type category number for the encounter.
+      - name: CALCULATED_ENC_STAT_C
+        description: A status flag used to determine whether to include data from the encounter in the SlicerDicer reporting application. Statuses includes 1-Possible (e.g., the encounter is a scheduled outpatient appointment or the admission is pending) or 2-Complete (e.g., the appointment is complete, the admission is discharged).
+      - name: APPT_STATUS_C
+        description: The category value associated with the appointment status of the encounter as of the most recent enterprise reporting extract, such as 1 ? Scheduled, 2 ? Completed, 3 ? Canceled, etc.
+      - name: ENC_TYPE_C
+        description: The encounter type category number for the encounter.
+      - name: CHECKIN_TIME
+        description: The date and time the patient was checked in for the appointment for this encounter. Note that the date portion of this value is always the appointment date, regardless of the date on which the appointment was actually checked in. Also, the time portion of this value can be modified by users in the application. This may or may not be more accurate than the system-audited time. To determine the check in instant recorded by the system, use the CHECKIN_AUD_DTTM column in PAT_ENC_7.
+      - name: APPT_TIME
+        description: The scheduled appointment date and time for the encounter recorded using a twenty-four hour clock, i.e. 1 P.M. on January 4, 2000, would be 01/04/2000 13:00.
+      - name: ENC_INSTANT
+        description: The instant an encounter was created
+      - name: CONTACT_DATE
+        description: The date of this contact in calendar format.
+      - name: CHECKOUT_TIME
+        description: The date and time the patient was checked out for this encounter. Note that the date portion of this value is always the appointment date, regardless of the date on which the appointment was actually checked out. Also, the time portion of this value can be modified by users in the application. This may or may not be more accurate than the system-audited time. To determine the check out instant recorded by the system, use the CHECKOUT_AUD_DTTM column in PAT_ENC_7.
+      - name: ENC_CLOSE_TIME
+        description: This column contains the time that this encounter was closed
+      - name: ACCOUNT_ID
+        description: The ID number of the guarantor account assigned to the visit at the time it is scheduled or when it is checked in. This ID may be encrypted.
+      - name: HSP_ACCOUNT_ID
+        description: The ID number of the hospital billing account assigned to the encounter.
+      - name: INPATIENT_DATA_ID
+        description: The ID number of the record used to determine how inpatient data is stored for the encounter
+      - name: APPT_PRC_ID
+        description: The unique ID of the visit type (PRC .1) assigned to the encounter when the appointment is made.

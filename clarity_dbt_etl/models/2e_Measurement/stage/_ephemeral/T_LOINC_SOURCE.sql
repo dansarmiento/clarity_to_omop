@@ -1,0 +1,15 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__T_LOINC_SOURCE
+SELECT CONCEPT_ID
+    ,CONCEPT_CODE
+
+FROM {{ref('CONCEPT_stg')}} AS C
+WHERE (
+        C.INVALID_REASON IS NULL
+        OR C.INVALID_REASON = ''
+        )
+    AND UPPER(C.DOMAIN_ID) = 'MEASUREMENT'
+    AND UPPER(VOCABULARY_ID) = 'LOINC'
+    AND UPPER(CONCEPT_CLASS_ID) = 'LAB TEST'
+--END cte__T_LOINC_SOURCE
+--

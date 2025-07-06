@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: MAR_ADMIN_INFO_stg
+    description: This table contains the currently active medication administration data. 
+    columns:    
+      - name: ORDER_MED_ID
+        description: 	The unique ID of the medication order.
+      - name: LINE
+        description: 	The line count for the item
+      - name: TAKEN_TIME
+        description: 	The user-specified time that the action took place. 
+      - name: SIG
+        description: 	The dose value of the administration. 
+      - name: MAR_ACTION_C
+        description: 	The MAR action category number associated with this administration 
+      - name: EDITED_LINE
+        description: 	The line number of the previously saved data for this administration. 
+      - name: REASON_C
+        description: 	The category ID of the reason that is given for documenting a certain action. 
+      - name: INFUSION_RATE
+        description: 	The rate at which the medication was infused.
+      - name: MAR_INF_RATE_UNIT_C
+        description: 	The unit category number associated with the infusion rate of the administration.
+      - name: DOSE_UNIT_C
+        description: 	The unit category number associated with the dose of the administration.
+      - name: ROUTE_C
+        description: 	The route category number associated with this administration..
+      - name: MAR_ENC_CSN
+        description: 	The unique contact serial number for the encounter that was accessed to administer the medication.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - ORDER_MED_ID
+            - LINE

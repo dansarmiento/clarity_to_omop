@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: IP_LDA_NOADDSINGLE_stg
+    description: This table stores LDA information for a patient. A record is created in LDA for insertion of every line, drain, airway, or wound for a patient, as well as entering a trip into a patient's travel history. The no-add information for this LDA is stored in the table.
+    columns:
+      - name: IP_LDA_ID
+        description: 	The internal ID of the Lines/Drains/Airways (LDA) record.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: PAT_ENC_CSN_ID
+        description: This item stores the contact serial number of the encounter in which the record was created.
+      - name: FLO_MEAS_ID
+        description: This item stores the Flowsheet ID that defines the structure of this record. It is the flowsheet group that is used to define the set of rows for the Line/Drain/Airway (LDA).
+      - name: PLACEMENT_INSTANT
+        description: 	This item stores the placement instant of the record.
+      - name: REMOVAL_INSTANT
+        description: 	This item stores the instant at which the line/drain was removed.
+      - name: DESCRIPTION
+        description: UPPER("DESCRIPTION") 	This item stores the name/description of the line/drain.
+      - name: PROPERTIES_DISPLAY
+        description: UPPER("PROPERTIES_DISPLAY") 	Stores the properties display string to be displayed in Doc Flowsheets and Reports.
+      - name: SITE
+        description: UPPER("SITE") 	This item stores site information for the inserted Line/Drain/Airway.
+

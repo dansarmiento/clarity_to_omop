@@ -1,0 +1,45 @@
+
+/******************************************************************************
+* Script Name: Z_NOTE_LOOKUP
+* Description: Retrieves a list of available patient notes with relevant metadata
+* Notes: Actual text from HNO_NOTE_TEXT has been commented out for performance
+* 
+******************************************************************************/
+
+SELECT 
+    PATIENT_DRIVER.PERSON_ID,
+    HNO_INFO.PAT_ID,
+    HNO_INFO.PAT_ENC_CSN_ID,
+    NOTE_ENC_INFO.ENTRY_INSTANT_DTTM,
+    ZC_NOTE_TYPE_IP.NAME AS ZC_NOTE_TYPE_IP_NAME,
+    HNO_INFO.IP_NOTE_TYPE_C,
+    HNO_INFO.AMB_NOTE_YN,
+    NOTE_ENC_INFO.NOTE_ID,
+    NOTE_ENC_INFO.CONTACT_DATE_REAL,
+    NOTE_ENC_INFO.CONTACT_SERIAL_NUM
+    -- Commented out for performance
+    -- ,HNO_NOTE_TEXT.LINE
+    -- ,HNO_NOTE_TEXT.NOTE_CSN_ID
+    -- ,HNO_NOTE_TEXT.CONTACT_DATE
+    -- ,HNO_NOTE_TEXT.CM_CT_OWNER_ID
+    -- ,HNO_NOTE_TEXT.CHRON_ITEM_NUM
+    -- ,HNO_NOTE_TEXT.NOTE_TEXT
+    -- ,HNO_NOTE_TEXT.IS_ARCHIVED_YN
+FROM 
+    CARE_BRONZE_CLARITY_PROD.DBO.HNO_INFO AS HNO_INFO
+    INNER JOIN CARE_BRONZE_CLARITY_PROD.DBO.ZC_NOTE_TYPE_IP AS ZC_NOTE_TYPE_IP
+        ON HNO_INFO.IP_NOTE_TYPE_C = ZC_NOTE_TYPE_IP.TYPE_IP_C
+    INNER JOIN CARE_BRONZE_CLARITY_PROD.DBO.NOTE_ENC_INFO AS NOTE_ENC_INFO
+        ON HNO_INFO.NOTE_ID = NOTE_ENC_INFO.NOTE_ID
+    -- Commented out for performance
+    -- INNER JOIN CARE_BRONZE_CLARITY_PROD.DBO.HNO_NOTE_TEXT AS HNO_NOTE_TEXT
+    --     ON NOTE_ENC_INFO.NOTE_ID = HNO_NOTE_TEXT.NOTE_ID
+    --     AND NOTE_ENC_INFO.CONTACT_DATE_REAL = HNO_NOTE_TEXT.CONTACT_DATE_REAL
+    INNER JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP.PATIENT_DRIVER AS PATIENT_DRIVER
+        ON HNO_INFO.PAT_ID = PATIENT_DRIVER.EHR_PATIENT_ID
+
+-- Optional WHERE clause for filtering specific patients
+-- WHERE HNO_INFO.PAT_ID IN (
+--     SELECT EHR_PATIENT_ID 
+--     FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.PATIENT_DRIVER
+-- )

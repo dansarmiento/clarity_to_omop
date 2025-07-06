@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: PAT_OR_ADM_LINK_stg
+    description: his table stores the link between encounter ID and the associated log or case ID.
+    columns:
+      - name: PAT_ENC_CSN_ID
+        description: 	The unique ID of the patient encounter.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: OR_LINK_CSN
+        description: The unique contact serial number of the admission linked to the procedural case/log .
+      - name: LOG_ID
+        description: The unique ID of the log (ORL) that is associated with this encounter..
+

@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: CLARITY_PRC_stg
+    description: The CLARITY_PRC table contains one record for each visit type, panel, agent, and visit type modifier in your system.
+    columns:
+      - name: PRC_ID
+        description: The unique ID of the visit type record.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: PRC_NAME
+        description: UPPER("NAME") The name of the visit type.
+

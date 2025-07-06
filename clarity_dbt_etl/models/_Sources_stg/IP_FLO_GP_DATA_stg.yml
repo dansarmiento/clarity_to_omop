@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: IP_FLO_GP_DATA_stg
+    description: This table contains generic information about flowsheet groups/rows.
+    columns:
+      - name: FLO_MEAS_ID
+        description: 	The unique ID of the flowsheet group/row.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: MINVALUE
+        description:  The minimum value allowed in this row.
+      - name: MAX_VAL
+        description:  The maximum value allowed in this row.
+      - name: FLO_MEAS_NAME
+        description: UPPER("FLO_MEAS_NAME") The name given to the flowsheet group/row..
+      - name: VAL_TYPE_C
+        description:  This determines the type of data in the record (i.e. numeric, string, temperature, etc.).
+      - name: UNITS
+        description: UPPER("UNITS") This determines the units that will display with the value in the additional information window..
+      - name: DISP_NAME
+        description: UPPER("DISP_NAME") The display name given to the flowsheet group/row..
+      - name: CAT_INI
+        description: 	This is the INI which contains the item that stores the category list.
+      - name: CAT_ITEM
+        description: 	This is the item number in the INI which stores the category list.
+

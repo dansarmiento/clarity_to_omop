@@ -1,0 +1,17 @@
+
+{%- set source_relation = source('CLARITY', 'IP_LDA_NOADDSINGLE') -%}
+{{ config(materialized = 'ephemeral') }}
+--BEGIN IP_LDA_NOADDSINGLE_stg
+SELECT
+	IP_LDA_ID
+    ,PAT_ENC_CSN_ID
+    ,FLO_MEAS_ID
+    ,PLACEMENT_INSTANT
+    ,REMOVAL_INSTANT
+    ,UPPER("DESCRIPTION")         AS DESCRIPTION
+    ,UPPER("PROPERTIES_DISPLAY")  AS PROPERTIES_DISPLAY
+	,UPPER("SITE")                AS  SITE
+FROM
+	{{source('CLARITY','IP_LDA_NOADDSINGLE')}} AS  IP_LDA_NOADDSINGLE
+--END IP_LDA_NOADDSINGLE_stg
+--   

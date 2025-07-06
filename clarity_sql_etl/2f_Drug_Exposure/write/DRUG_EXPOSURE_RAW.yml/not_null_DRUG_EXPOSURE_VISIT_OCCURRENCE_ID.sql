@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select VISIT_OCCURRENCE_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.DRUG_EXPOSURE
+where VISIT_OCCURRENCE_ID is null
+
+

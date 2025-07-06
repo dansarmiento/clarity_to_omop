@@ -1,0 +1,7 @@
+{{ config(materialized='ephemeral') }}
+    --BEGIN cte__ SOURCE_TO_CONCEPT_MAP_NOTE_CLASS
+    SELECT *
+    FROM {{ref('SOURCE_TO_CONCEPT_MAP_stg')}}
+    WHERE SOURCE_VOCABULARY_ID = 'SH_NOTE_CLASS'
+--END cte__ SOURCE_TO_CONCEPT_MAP_NOTE_CLASS
+--

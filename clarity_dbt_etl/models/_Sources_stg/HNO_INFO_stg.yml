@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: HNO_INFO_stg
+    description: 	This table contains common information from General Use Notes items. This table focuses on time-insensitive, once-per-record data while other HNO tables (e.g., NOTES_ACCT, CODING_CLA_NOTES) contain the data for different note types.
+    columns:
+      - name: NOTE_ID
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: PAT_ID
+        description: The unique ID of the patient who is associated to this note. 
+      - name: PAT_ENC_CSN_ID
+        description: 	The unique contact serial number for the patient encounter to which the note is attached.
+      - name: IP_NOTE_TYPE_C
+        description: 	The note type associated with this note.
+      - name: AMB_NOTE_YN
+        description: 	Indicates whether the note is an ambulatory note. Y indicates that the note's encounter context is ambulatory. N or a null value indicates that the context is not ambulatory.

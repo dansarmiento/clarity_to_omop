@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: HSP_ACCT_ADMIT_DX_stg
+    description: No description available
+    columns:
+      - name: HSP_ACCOUNT_ID
+        description: 	This column stores the unique identifier for the hospital account.
+      - name: LINE
+        description: This column stores the line number in the results of a query. As multiple admission diagnoses can be stored in one hospital account, each diagnosis will have a unique line number.
+      - name: ADMIT_DX_ID
+        description: This column stores the unique identifier for admission diagnosis stored in the hospital account.
+      - name: ADMIT_DX_TEXT
+        description: UPPER("ADMIT_DX_TEXT") A text description of an admission diagnosis stored in the hospital account.
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - HSP_ACCOUNT_ID
+            - LINE

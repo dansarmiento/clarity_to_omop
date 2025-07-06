@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: ZC_MED_UNIT_stg
+    description: No description available
+    columns:
+      - name: DISP_QTYUNIT_C
+        description: 	No description available
+        tests:
+          - unique
+          - not_null         
+      - name: ZC_MED_UNIT_NAME
+        description: UPPER("NAME") The name given to this category item.
+
+

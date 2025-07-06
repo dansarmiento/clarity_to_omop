@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: CLARITY_SER_2_stg
+    description: The CLARITY_SER table contains high-level information about your provider records. These records may be caregivers, resources, classes, devices, and modalities.
+    columns:
+      - name: PROV_ID
+        description: The unique ID assigned to the provider record. 
+        tests:
+          - unique
+          - not_null
+      - name: NPI
+        description: The provider's National Provider Identifier (NPI). This is a 10 digit numeric identifier issued to providers by the Centers for Medicare and Medicaid Services.
+      - name: PRIMARY_DEPT_ID
+        description: The provider's primary department. This is equivalent to line 1 of CLARITY_SER_DEPT.

@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: CLARITY_EMP_stg
+    description: 	This table contains high-level information about user records from the User master file
+    columns:
+      - name: USER_ID
+        description: The unique ID assigned to the user record. This ID may be encrypted.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: PROV_ID
+        description: The unique ID of the provider record that is linked to this user record if the user is a clinical system provider. This ID may be encrypted.
+      - name: LGIN_DEPARTMENT_ID
+        description: 	The ID of the default Hyperspace login department for this user.
+

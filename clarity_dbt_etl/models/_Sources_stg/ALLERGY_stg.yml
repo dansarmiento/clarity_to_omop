@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: ALLERGY_stg
+    description: No description available
+    columns:
+      - name: ALLERGY_ID
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ALLERGEN_ID
+        description: 	The unique ID assigned to the allergen (Agent) record.
+      - name: ALRGY_ENTERED_DTTM
+        description: 	The date and time the allergy was entered into the patient's record using a calendar format
+      - name: DESCRIPTION
+        description: UPPER("DESCRIPTION") Stores a description for the allergy name
+      - name: ALLERGY_PAT_CSN
+        description: The patient contact corresponding to the patient encounter in which this allergy was edited.

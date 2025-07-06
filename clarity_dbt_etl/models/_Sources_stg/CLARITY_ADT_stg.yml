@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: CLARITY_ADT_stg
+    description: 	The CLARITY_ADT table is the master table for ADT event history information. This table contains several foreign keys for other ADT tables
+    columns:
+      - name: EVENT_ID
+        description:  The unique ID number of the ADT event record.
+        tests:
+          - unique
+          - not_null
+      - name: PAT_ID
+        description: 	The ID of the patient of the event record at the effective time.
+      - name: PAT_ENC_CSN_ID
+        description:  The unique contact serial number for this contact. This number is unique across all patient encounters in your system. If you use IntraConnect, this is the Unique Contact Identifier (UCI).
+      - name: EVENT_TYPE_C
+        description: The category value corresponding to the type of the event record
+      - name: ROOM_ID
+        description: 	The ID number of the room of the event record at the effective time.
+      - name: BED_ID
+        description: The ID number of the bed of the event record at the effective time.
+      - name: PAT_SERVICE_C
+        description: 	The category value corresponding to the hospital service for the patient of the event record at the effective time.
+      - name: PAT_LVL_OF_CARE_C
+        description: 	The category value corresponding to the level of care for the patient of the event record at the effective time
+      - name: SEQ_NUM_IN_ENC
+        description: This column contains the sequence number for this event within a patient encounter. You can use this number to determine the order of events for a particular encounter. Only non-canceled events are included within this sequence.
+      - name: EFFECTIVE_TIME
+        description: The instant when the event was supposed to have happened
+      - name: NEXT_OUT_EVENT_ID
+        description: The ID number of the next 'transfer out' or 'discharge' type record for this bed for the patient CSN of these records

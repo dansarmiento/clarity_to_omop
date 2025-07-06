@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: CLARITY_EDG_stg
+    description: The CLARITY_EDG table contains basic information about diagnoses.
+    columns:
+      - name: DX_ID
+        description: The unique ID of the diagnosis record in your system.
+        tests:
+          - unique
+          - not_null
+      - name: DX_NAME
+        description: The name of the diagnosis.
+      - name: CURRENT_ICD9_LIST
+        description: For term-type and both-type records, this is the record's current mapped ICD-9-CM code(s) as a list. Values are separated by a comma and a space. Code-type records of the ICD-9-CM code set will have a value here as well that represents their reference code.
+      - name: CURRENT_ICD10_LIST
+        description: For term-type and both-type records, this is the record's current mapped ICD-10-CM code(s) as a list. Values are separated by a comma and a space. Code-type records of the ICD-10-CM code set will have a value here as well that represents their reference code.
+

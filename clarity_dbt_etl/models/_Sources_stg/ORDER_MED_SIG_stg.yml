@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ORDER_MED_SIG_stg
+    description: 	The ORDER_MED_SIG table stores the patient instructions for a prescription as entered by the user. The table should be used in conjunction with the ORDER_MED table which contains related medication, patient, and contact identification information you can report on.
+    columns:
+      - name: ORDER_ID
+        description: The unique ID of the order record associated with this medication order.
+        tests:
+          - unique
+          - not_null        
+      - name: SIG_TEXT
+        description: 	Patient instructions for the prescription as entered by the user.

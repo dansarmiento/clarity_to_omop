@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: IP_FLWSHT_MEAS_stg
+    description: This table contains the patient-specific measurements from flowsheets.
+    columns:
+      - name: FSD_ID
+        description: The unique ID for the flowsheet data record.
+      - name: LINE
+        description: The line count for the item.
+      - name: FLO_MEAS_ID
+        description: The unique ID for the flowsheet group/row associated with this reading.     
+      - name: RECORDED_TIME
+        description: The instant the reading was taken.
+      - name: MEAS_VALUE
+        description: UPPER("MEAS_VALUE") The actual value of the flowsheet reading.
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - FSD_ID
+            - LINE

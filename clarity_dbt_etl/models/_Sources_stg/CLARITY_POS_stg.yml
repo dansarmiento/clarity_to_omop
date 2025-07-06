@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: CLARITY_POS_stg
+    description: The CLARITY_POS table contains information about your places of service. All EAF records are included in this table regardless of their type. That is, facilities, locations, service areas, and places of service are all included in this table.
+    columns:
+      - name: POS_ID
+        description: 	The unique ID number assigned to the place of service record.
+        tests:
+          - unique
+          - not_null
+      - name: POS_NAME
+        description: The name of the place of service.
+      - name: POS_TYPE
+        description: The name of the place of service.
+#      - name: POS_TYPE_C
+#        description: The name of the place of service.
+      - name: ADDRESS_LINE_1
+        description: 	The first line of the street address for this place of service.
+      - name: ADDRESS_LINE_2
+        description: The second line of the street address for this place of service.
+      - name: CITY
+        description: The city for this place of service.
+      - name: STATE_C
+        description: The state for this place of service
+      - name: ZIP
+        description: The ZIP code for this place of service
+      - name: COUNTY_C
+        description: County in which a facility is located. Part of an address in some countries.
+

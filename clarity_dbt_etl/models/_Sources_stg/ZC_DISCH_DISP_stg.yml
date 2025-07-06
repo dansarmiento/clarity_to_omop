@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_DISCH_DISP_stg
+    description: This table contains the category information for discarge dispositions.
+    columns:
+      - name: DISCH_DISP_C
+        description: 	This is the discharge disposition code.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_DISCH_DISP_NAME
+        description: UPPER("NAME") The name given to this category item.

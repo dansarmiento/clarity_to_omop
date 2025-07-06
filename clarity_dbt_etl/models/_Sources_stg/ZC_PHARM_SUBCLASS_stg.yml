@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_PHARM_SUBCLASS_stg
+    description: No description available
+    columns:
+      - name: PHARM_SUBCLASS_C
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_PHARM_SUBCLASS_NAME
+        description: UPPER("NAME") The name given to this category item.

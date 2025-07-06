@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_ETHNIC_GROUP_stg
+    description: This table contains the category information for ethnic groups.
+    columns:
+      - name: ETHNIC_GROUP_C
+        description: 	This is the ethnic group code.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_ETHNIC_GROUP_NAME
+        description: UPPER("NAME") The name given to this category item.

@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: HSC_SPEC_INFO_stg
+    description: This table holds the specimen details.
+    columns:
+      - name: RECORD_ID
+        description: This column holds the specimen record ID.
+        tests:
+          - unique
+          - not_null
+      - name: SPECIMEN_SIZE
+        description: This item is used to document the size of the specimen collected.
+      - name: SPECIMEN_TYPE_C
+        description: This column is used to store type of specimen.
+      - name: SPECIMEN_UNIT_C
+        description: This item is used to indicate the unit corresponding to the specimen size documented.
+

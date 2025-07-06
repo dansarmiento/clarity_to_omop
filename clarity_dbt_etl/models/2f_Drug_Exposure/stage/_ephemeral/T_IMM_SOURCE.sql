@@ -1,0 +1,16 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__T_DRUG_SOURCE
+    SELECT CONCEPT_ID
+        ,CONCEPT_CODE
+        ,CONCEPT_CLASS_ID
+        ,CONCEPT_NAME
+
+    FROM {{ref('CONCEPT_stg')}} AS C
+
+    WHERE UPPER(C.VOCABULARY_ID) IN ('CVX')
+        AND (
+            C.INVALID_REASON IS NULL
+            OR C.INVALID_REASON = ''
+            )
+        AND UPPER(C.DOMAIN_ID) = 'DRUG'
+--END cte__T_DRUG_SOURCE

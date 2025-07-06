@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: LINKED_PERFORMABLE_stg
+    description: No description available
+    columns:
+      - name: PROC_ID
+        description: 	The unique ID of a procedure record in your system.
+      - name: CONTACT_DATE_REAL
+        description: This is a numeric representation of the date of this encounter in your system. The integer portion of the number specifies the date of the encounter. The digits after the decimal point indicate multiple visits on one day.
+      - name: LINE
+        description: The Line Count
+      - name: LINKED_PERFORM_ID
+        description: The performable procedure records that are linked to an orderable procedure record.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - PROC_ID
+            - CONTACT_DATE_REAL
+            - LINE

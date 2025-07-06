@@ -1,0 +1,96 @@
+---------------------------------------------------------------------
+-- QA_DEVICE_EXPOSURE_NONSTANDARD_COUNT
+-- Checks for non-standard concept IDs in DEVICE_EXPOSURE table
+---------------------------------------------------------------------
+
+WITH CTE_NON_STANDARD_COUNT AS (
+    -- Check DEVICE_CONCEPT_ID
+    SELECT
+        'DEVICE_EXPOSURE' AS STANDARD_DATA_TABLE
+        , 'DEVICE_CONCEPT_ID' AS METRIC_FIELD 
+        , 'NON-STANDARD' AS QA_METRIC
+        , 'INVALID DATA' AS ERROR_TYPE
+        , COUNT(*) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.DEVICE_EXPOSURE_RAW AS P
+    LEFT JOIN CARE_RES_OMOP_GEN_WKSP.OMOP.CONCEPT AS C
+        ON P.DEVICE_CONCEPT_ID = C.CONCEPT_ID 
+        AND UPPER(C.DOMAIN_ID) = 'DEVICE'
+        AND UPPER(C.VOCABULARY_ID) = 'SNOMED'
+    WHERE DEVICE_CONCEPT_ID <> 0 
+        AND DEVICE_CONCEPT_ID IS NOT NULL
+        AND (STANDARD_CONCEPT <> 'S' OR STANDARD_CONCEPT IS NULL)
+
+    UNION ALL
+
+    -- Check DEVICE_TYPE_CONCEPT_ID  
+    SELECT
+        'DEVICE_EXPOSURE' AS STANDARD_DATA_TABLE
+        , 'DEVICE_TYPE_CONCEPT_ID' AS METRIC_FIELD
+        , 'NON-STANDARD' AS QA_METRIC
+        , 'INVALID DATA' AS ERROR_TYPE
+        , COUNT(*) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.DEVICE_EXPOSURE_RAW AS P
+    LEFT JOIN CARE_RES_OMOP_GEN_WKSP.OMOP.CONCEPT AS C
+        ON P.DEVICE_TYPE_CONCEPT_ID = C.CONCEPT_ID
+        AND UPPER(C.DOMAIN_ID) = 'TYPE CONCEPT'
+        AND UPPER(C.CONCEPT_CLASS_ID) = 'TYPE CONCEPT'
+    WHERE DEVICE_TYPE_CONCEPT_ID <> 0
+        AND DEVICE_TYPE_CONCEPT_ID IS NOT NULL
+        AND (STANDARD_CONCEPT <> 'S' OR STANDARD_CONCEPT IS NULL)
+
+    UNION ALL
+
+    -- Check DEVICE_SOURCE_CONCEPT_ID
+    SELECT
+        'DEVICE_EXPOSURE' AS STANDARD_DATA_TABLE
+        , 'DEVICE_SOURCE_CONCEPT_ID' AS METRIC_FIELD
+        , 'NON-STANDARD' AS QA_METRIC
+        , 'INVALID DATA' AS ERROR_TYPE
+        , COUNT(*) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.DEVICE_EXPOSURE_RAW AS P
+    LEFT JOIN CARE_RES_OMOP_GEN_WKSP.OMOP.CONCEPT AS C
+        ON P.DEVICE_SOURCE_CONCEPT_ID = C.CONCEPT_ID
+        AND UPPER(C.DOMAIN_ID) = 'DEVICE'
+        AND UPPER(C.VOCABULARY_ID) = 'SNOMED'
+    WHERE DEVICE_SOURCE_CONCEPT_ID <> 0
+        AND DEVICE_SOURCE_CONCEPT_ID IS NOT NULL
+        AND C.CONCEPT_ID IS NOT NULL
+)
+
+SELECT 
+    CAST(GETDATE() AS DATE) AS RUN_DATE
+    , STANDARD_DATA_TABLE
+    , QA_METRIC AS QA_METRIC
+    , METRIC_FIELD AS METRIC_FIELD
+    , COALESCE(SUM(CNT),0) AS QA_ERRORS
+    , CASE WHEN SUM(CNT) <> 0 THEN ERROR_TYPE ELSE NULL END AS ERROR_TYPE
+    , (SELECT COUNT(*) FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.DEVICE_EXPOSURE_RAW) AS TOTAL_RECORDS
+    , (SELECT COUNT(*) FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.DEVICE_EXPOSURE) AS TOTAL_RECORDS_CLEAN
+FROM CTE_NON_STANDARD_COUNT
+GROUP BY STANDARD_DATA_TABLE, METRIC_FIELD, QA_METRIC, ERROR_TYPE;
+
+/*
+COLUMN DESCRIPTIONS:
+------------------
+RUN_DATE: Date the QA check was executed
+STANDARD_DATA_TABLE: Name of table being checked (DEVICE_EXPOSURE)
+QA_METRIC: Type of check being performed (NON-STANDARD)
+METRIC_FIELD: Specific field being validated
+QA_ERRORS: Count of records failing the check
+ERROR_TYPE: Description of the error if any found
+TOTAL_RECORDS: Total count of records in raw table
+TOTAL_RECORDS_CLEAN: Total count of records in clean table
+
+LOGIC:
+------
+1. Checks DEVICE_CONCEPT_ID for non-standard SNOMED concepts
+2. Checks DEVICE_TYPE_CONCEPT_ID for non-standard type concepts
+3. Checks DEVICE_SOURCE_CONCEPT_ID for invalid SNOMED source concepts
+4. Aggregates results and compares raw vs clean record counts
+
+LEGAL DISCLAIMER:
+This code is provided "AS IS" without warranty of any kind.
+The entire risk as to the quality and performance of the code is with you.
+Should the code prove defective, you assume the cost of all necessary
+servicing, repair or correction.
+*/

@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: OR_LOG_stg
+    description: The OR_LOG table contains information about surgical and procedural log (ORL) records.
+    columns:
+      - name: LOG_ID
+        description: The unique ID of the procedural log record for this row.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: SCHED_START_TIME
+        description: The date and time at which the surgery in the surgical log was performed.
+      - name: PRIMARY_PHYS_ID
+        description: The unique ID of the physician who is the primary physician for this log.
+      - name: STATUS_C
+        description: 	The category ID for the log status (Posted, Unposted, Voided, etc.) associated with the log record.

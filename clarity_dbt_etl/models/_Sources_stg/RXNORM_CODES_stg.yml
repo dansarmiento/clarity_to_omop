@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: RXNORM_CODES_stg
+    description: This table contains the RxNorm code for the medications.
+    columns:
+      - name: MEDICATION_ID 
+        description: The unique identifier (.1 item) for the medication record.
+      - name: LINE
+        description: The line number for the information associated with this record. 
+      - name: RXNORM_CODE
+        description: 	This is the RxNorm code which represents this ERX at the level specified in RXNORM_CODE_LEVEL_C.
+      - name: RXNORM_TERM_TYPE_C
+        description: This item stores the RxNorm term type for the corresponding RxNorm code. 
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - MEDICATION_ID
+            - LINE

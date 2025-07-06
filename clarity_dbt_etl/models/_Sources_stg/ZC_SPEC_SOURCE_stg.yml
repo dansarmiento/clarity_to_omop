@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_SPEC_SOURCE_stg
+    description: This table contains the category information for specimen sources.
+    columns:
+      - name: SPEC_SOURCE_C
+        description: 	The category number for the specimen source.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_SPEC_SOURCE_NAME
+        description: UPPER("NAME") The name given to this category item.
+

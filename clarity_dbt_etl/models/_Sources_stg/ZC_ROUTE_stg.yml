@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_ROUTE_stg
+    description: This table contains the category information for medication administration routes.
+    columns:
+      - name: ROUTE_C
+        description: 	This is the admin route category code.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_ROUTE_NAME
+        description: UPPER("NAME") The name given to this category item.

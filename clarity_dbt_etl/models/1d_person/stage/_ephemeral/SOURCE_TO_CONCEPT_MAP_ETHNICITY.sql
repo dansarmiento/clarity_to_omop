@@ -1,0 +1,6 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__SOURCE_TO_CONCEPT_MAP_ETHNICITY
+    SELECT *
+    FROM {{ref('SOURCE_TO_CONCEPT_MAP_stg')}}
+    WHERE SOURCE_VOCABULARY_ID = 'SH_ETHNICITY'
+--END cte__SOURCE_TO_CONCEPT_MAP_ETHNICITY

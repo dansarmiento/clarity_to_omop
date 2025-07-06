@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: ZC_RSN_FOR_DISCON_stg
+    description: No description available
+    columns:
+      - name: RSN_FOR_DISCON_C
+        description: 	No description available 
+        tests:
+          - unique
+          - not_null         
+
+      - name: ZC_RSN_FOR_DISCON_NAME
+        description: UPPER("NAME") The name given to this category item.
+

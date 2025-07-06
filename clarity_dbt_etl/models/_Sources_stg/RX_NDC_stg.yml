@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: RX_NDC_stg
+    description: 	This table contains the National Drug Code (NDC) information.
+
+    columns:
+      - name: 	NDC_ID
+        description: The unique ID for the NDC (National Drug Code).
+      - name: 	NDC_CODE
+        description: 	The external code for the National Drug Code (NDC). An NDC represents packages of medications.
+      - name: RAW_11_DIGIT_NDC
+        description: 	11-digit Raw NDC, without any format.
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - NDC_ID

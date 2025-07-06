@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ORDER_PROC_2_stg
+    description: The ORDER_PROC_2 table enables you to report on the procedures ordered in the clinical system. This procedure table has the same basic structure as ORDER_PROC, but was created as a second table to prevent ORDER_PROC from getting any larger.
+    columns:
+      - name: ORDER_PROC_ID
+        description: The unique ID of the procedure order record.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: SPECIMN_TAKEN_TIME
+        description: The time the specimen was taken.

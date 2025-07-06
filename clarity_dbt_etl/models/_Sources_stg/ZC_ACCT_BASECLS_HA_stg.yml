@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_ACCT_BASECLS_HA_stg
+    description: This table contains the category information for account base classes.
+    columns:
+      - name: ACCT_BASECLS_HA_C
+        description: 	This is the account base classes' category code.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_ACCT_BASECLS_HA_NAME
+        description: UPPER("NAME") The name given to this category item.

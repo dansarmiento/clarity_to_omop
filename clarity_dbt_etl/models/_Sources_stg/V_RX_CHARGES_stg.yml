@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: V_RX_CHARGES_stg
+    description: 	This view collects and displays Universal Charge Line information for Willow charges.
+
+    columns:
+      - name: UCL_ID
+        description: The unique ID assigned to the UCL record (UCL .1).
+      - name: CHARGE_COUNT
+        description: 		The void state of this row, used for summarizing the number of charges-credits. If this column is set to 1, it is a charge; if it is set to -1, it is a credit/adjustment.
+      - name: IMPLIED_QTY
+        description: 	The implied medication quantity for the order at the time this charge was dropped.
+      - name: CHARGED_QTY
+        description: 	The amount of the medication that was charged for.
+      - name: CHARGED_QTY_UNIT_NAME
+        description: 	The unit for the charged quantity.
+      - name: ORDER_ID
+        description: 	This column stores the order ID associated with the charge.
+      - name: DISP_NDC_CSN
+        description: 		The NDC CSN of the dispensed medication.
+
+

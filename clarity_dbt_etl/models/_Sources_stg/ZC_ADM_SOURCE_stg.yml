@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_ADM_SOURCE_stg
+    description: This table contains the category information for admit sources.
+    columns:
+      - name: ADMIT_SOURCE_C
+        description: 	This is the admit source category code.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_ADM_SOURCE_NAME
+        description: UPPER("NAME") The name given to this category item.

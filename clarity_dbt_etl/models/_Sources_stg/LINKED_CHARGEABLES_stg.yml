@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: LINKED_CHARGEABLES_stg
+    description: This table contains information about performable procedure records linked to orderable procedure records. An orderable record may be linked to one or more performable records.
+    columns:
+      - name: PROC_ID
+        description: The unique ID of a procedure record in your system. This is referring to the internal ID, not the industry standard procedure code.
+
+      - name: CONTACT_DATE_REAL
+        description: This is a numeric representation of the date of this encounter in your system. The integer portion of the number specifies the date of the encounter. The digits after the decimal point indicate multiple visits on one day.
+
+      - name: LINE
+        description: The Line Count
+
+      - name: LINKED_CHRG_ID
+        description: This column shows the chargeable procedure record or records to which an orderable or performable procedure record may be linked. This indicates the possible charges in which an order or performed service might result.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - PROC_ID
+            - CONTACT_DATE_REAL
+            - LINE

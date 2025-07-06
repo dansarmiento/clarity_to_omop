@@ -1,0 +1,57 @@
+--STAGE_MEASUREMENT_AMB_FLOWSHEET_TEMPERATURE
+{#-- {{ config(materialized = 'view', schema = 'OMOP_STAGE') }}#}
+--
+SELECT DISTINCT
+	T_TEMPERATURE_MERGE.PERSON_ID
+	,T_TEMPERATURE_MERGE.TARGET_CONCEPT_ID                  				AS MEASUREMENT_CONCEPT_ID
+	,MEASUREMENT_DATE                                       				AS MEASUREMENT_DATE
+	,MEASUREMENT_DATETIME                                   				AS MEASUREMENT_DATETIME
+	,32817                                                  				AS MEASUREMENT_TYPE_CONCEPT_ID --EHR
+	,4172703                                                				AS OPERATOR_CONCEPT_ID
+	,VALUE_AS_NUMBER                                        				AS VALUE_AS_NUMBER
+	,NULL                                                      				AS VALUE_AS_CONCEPT_ID
+	,COALESCE(
+        SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS_UNITS.TARGET_CONCEPT_ID
+        , 9289)                                             				AS UNIT_CONCEPT_ID --degF
+	,RANGE_LOW                                              				AS RANGE_LOW
+	,RANGE_HIGH                                             				AS RANGE_HIGH
+    ,PROVIDER.PROVIDER_ID                                   				AS PROVIDER_ID
+	,VISIT_OCCURRENCE.VISIT_OCCURRENCE_ID                   				AS VISIT_OCCURRENCE_ID
+--    ,VISIT_DETAIL.VISIT_DETAIL_ID AS VISIT_DETAIL_ID
+    ,NULL                                                      				AS VISIT_DETAIL_ID
+	,PULL_FLO_MEAS_ID::VARCHAR ||':'|| PULL_FLO_MEAS_NAME                   AS MEASUREMENT_SOURCE_VALUE
+	,NULL                                                      				AS MEASUREMENT_SOURCE_CONCEPT_ID
+	,COALESCE(
+        SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS_UNITS.SOURCE_CODE_DESCRIPTION
+        , 'degF')                                          	 				AS UNIT_SOURCE_VALUE
+	,VALUE_SOURCE_VALUE                                     				AS VALUE_SOURCE_VALUE
+    ,NULL                                                      				AS UNIT_SOURCE_CONCEPT_ID
+    ,NULL                                                   				AS MEASUREMENT_EVENT_ID
+    ,NULL                                                      				AS MEAS_EVENT_FIELD_CONCEPT_ID
+
+	-------- Non-OMOP Fields ------------
+	,'MEASUREMENT_AMB_FLOWSHEET_TEMPERATURE'              					AS ETL_MODULE
+	,VISIT_OCCURRENCE.phi_PAT_ID                      						AS STAGE_PAT_ID
+    ,VISIT_OCCURRENCE.phi_MRN_CPI                           				AS STAGE_MRN_CPI
+	,VISIT_OCCURRENCE.phi_CSN_ID											AS STAGE_CSN_ID
+	,PULL_FLO_MEAS_ID                          							    AS STAGE_FLO_MEAS_ID
+	,PULL_FLO_MEAS_NAME                           							AS STAGE_FLO_MEAS_NAME
+
+FROM {{ref('T_AMB_TEMPERATURE_MERGE')}} AS T_TEMPERATURE_MERGE
+
+    LEFT JOIN {{ ref('SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS_TEMP')}} AS  SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS
+    	ON T_TEMPERATURE_MERGE.PULL_FLO_MEAS_ID = SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS.SOURCE_CODE
+
+    LEFT JOIN {{ ref('SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS_UNITS')}} AS SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS_UNITS
+    	ON T_TEMPERATURE_MERGE.UNIT_SOURCE_VALUE  = SOURCE_TO_CONCEPT_MAP_FLOWSHEET_MEAS_UNITS.SOURCE_CODE
+
+    LEFT JOIN  {{ ref('SOURCE_TO_CONCEPT_MAP_AMB_VISIT')}} AS SOURCE_TO_CONCEPT_MAP_AMB_VISIT
+        ON T_TEMPERATURE_MERGE.PULL_ENC_TYPE_C  = SOURCE_TO_CONCEPT_MAP_AMB_VISIT.SOURCE_CODE
+
+    INNER JOIN {{ref('VISIT_OCCURRENCE_RAW')}} AS VISIT_OCCURRENCE
+    	ON T_TEMPERATURE_MERGE.PULL_CSN_ID = VISIT_OCCURRENCE.phi_CSN_ID
+
+    LEFT JOIN {{ref('PROVIDER_RAW')}} AS PROVIDER
+        ON T_TEMPERATURE_MERGE.PROVIDER_SOURCE_VALUE = PROVIDER.PROVIDER_SOURCE_VALUE
+
+	WHERE T_TEMPERATURE_MERGE.TARGET_CONCEPT_ID IS NOT NULL

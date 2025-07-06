@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: CLARITY_IMMUNZATN_stg
+    description: The CLARITY_IMMUNZATN table contains high-level information about the immunizations providers can choose on the Immunization Administration window.
+    columns:
+      - name: IMMUNZATN_ID
+        description: 	The unique ID of the immunization record.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: IMMUNZATN_ID_NAME
+        description: UPPER("NAME") The name given to this category item.
+
+      - name: CVX_CODE
+        description: CVX code for the given immunization
+
+

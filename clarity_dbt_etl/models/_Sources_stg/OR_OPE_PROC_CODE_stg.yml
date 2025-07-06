@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: OR_OPE_PROC_CODE_stg
+    description: The OR_OPE_PROC_CODE table contains information about log procedure codes.
+    columns:
+      - name: OPE_ID
+        description: 	No description available
+      - name: LINE
+        description: The unique identifier (.1 item) for the orders performed record.
+      - name: PROC_CODE_ID
+        description: The unique ID of the procedure code associated with the surgical procedure. This column is only populated for surgical logs which were created or modified after upgrading to the Epic 2018 version.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - OPE_ID
+            - LINE

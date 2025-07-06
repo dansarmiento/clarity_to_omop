@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: ORDER_PROC_stg
+    description: The ORDER_PROC table enables you to report on the procedures ordered in the clinical system. We have also included patient and contact identification information for each record.
+    columns:
+      - name:     PAT_ENC_CSN_ID
+        description: 	The unique contact serial number for this contact. This number is unique across patients and encounters in your system. If you use IntraConnect this is the Unique Contact Identifier (UCI).
+      - name: ORDERING_DATE
+        description: 	The date when the procedure order was placed.  
+      - name: ORDER_PROC_ID
+        description: The name given to this category item.  
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name:     PAT_ENC_CSN_ID
+        description: 	The unique contact serial number for this contact. This number is unique across patients and encounters in your system. If you use IntraConnect this is the Unique Contact Identifier (UCI).
+      - name: ORDER_TIME
+        description: The date and time when the procedure order was placed.  
+      - name: PROC_START_TIME
+        description: The date and time when the procedure order is to start.
+      - name: PROC_ENDING_TIME
+        description: The date and time when the procedure order is to end.
+      - name: INSTANTIATED_TIME
+        description: The date and time of instantiation when a child order is generated from a standing or future order..
+      - name: AUTHRZING_PROV_ID
+        description: The unique ID of the provider prescribing or authorizing the order.
+      - name: QUANTITY
+        description: 	The number of procedures authorized for this order..
+      - name: PROC_ID
+        description: The unique ID of the procedure record corresponding to this order. This can be used to link to CLARITY_EAP..
+      - name: MODIFIER1_ID
+        description: The unique ID of the modifier record. This is the first modifier entered for the procedure and affects how the procedure is billed..
+      - name: ORDER_STATUS_C
+        description: 	The order status category number of the procedure order.
+      - name: LAB_STATUS_C
+        description: 	The category number for the status of results for an order, as of the date and time the record was extracted.
+      - name: ORDER_CLASS_C
+        description: The order class category number of the procedure order..
+      - name: ORDER_TYPE_C
+        description: 	The order type category number for the procedure order.
+      - name: FUTURE_OR_STAND
+        description: 	This column indicates whether an order is a future (F) or standing (S) order.
+

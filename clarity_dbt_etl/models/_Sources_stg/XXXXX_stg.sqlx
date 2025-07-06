@@ -1,0 +1,11 @@
+
+{%- set source_relation = source('CLARITY', 'XXXXX') -%}
+{{ config(materialized = 'ephemeral') }}
+--BEGIN XXXXX_stg
+SELECT
+	YYYYY
+	, UPPER("NAME") AS  XXXXX_NAME
+FROM
+	{{source('CLARITY','XXXXX')}} AS  XXXXX
+--END XXXXX_stg
+--   

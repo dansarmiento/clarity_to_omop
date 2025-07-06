@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_OR_STATUS_stg
+    description: This table contains the category information for status for procedural logs.
+    columns:
+      - name: STATUS_C
+        description: 	The status category number for the procedural log. 
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_OR_STATUS_NAME
+        description: UPPER("NAME") The name given to this category item.
+

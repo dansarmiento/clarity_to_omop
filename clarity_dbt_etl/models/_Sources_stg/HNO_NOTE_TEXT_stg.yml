@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: HNO_NOTE_TEXT_stg
+    description: The HNO_NOTE_TEXT table contains the note text on I HNO 41 or I HNO 40. The text in HNO 40 or 41 is first converted to plain text. The formatting information in RTF note text or HTML note text is removed. The plain text is then broken up into lines of 1950 characters or less.
+    columns:
+      - name: NOTE_ID
+        description: The unique ID of the note record. 
+      - name: NOTE_CSN_ID
+        description: 	The unique contact serial number for this contact.
+      - name: LINE
+        description: The line number for the note text associated with this contact.
+      - name: CONTACT_DATE_REAL
+        description: 	A unique, internal contact date in decimal format. The integer portion of the number indicates the date of the contact
+      - name: CONTACT_DATE
+        description: The date of this contact in calendar format. 
+      - name: NOTE_TEXT
+        description: The text of the note. The note text is first converted to plain text, then broken into lines of 1950 characters or less. Words and line breaks are not split across different lines. 
+      - name: IS_ARCHIVED_YN
+        description: Indicates whether or not the note text is archived. During ETL process, the value on this column is updated by the TEXT_ARCHIVED_YN column on the UPD_HNO_CSN table. 
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - NOTE_CSN_ID
+            - LINE
+

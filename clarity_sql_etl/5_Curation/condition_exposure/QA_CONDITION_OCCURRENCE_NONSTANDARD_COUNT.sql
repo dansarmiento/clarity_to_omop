@@ -1,0 +1,117 @@
+/*
+QA check for non-standard concepts in CONDITION_OCCURRENCE table
+Checks the following concept ID fields:
+- CONDITION_CONCEPT_ID 
+- CONDITION_TYPE_CONCEPT_ID
+- CONDITION_SOURCE_CONCEPT_ID 
+- CONDITION_STATUS_CONCEPT_ID
+*/
+
+WITH nonstandard_count AS (
+    -- Check for non-standard CONDITION_CONCEPT_IDs
+    SELECT 
+        'CONDITION_CONCEPT_ID' AS METRIC_FIELD,
+        'NON-STANDARD' AS QA_METRIC, 
+        'INVALID DATA' AS ERROR_TYPE,
+        COUNT(*) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.CONDITION_OCCURRENCE_RAW AS CO
+    LEFT JOIN CARE_RES_OMOP_GEN_WKSP.OMOP.CONCEPT AS C
+        ON CO.CONDITION_CONCEPT_ID = C.CONCEPT_ID 
+        AND UPPER(C.DOMAIN_ID) = 'CONDITION'
+        AND UPPER(C.VOCABULARY_ID) IN ('SNOMED','OMOP EXTENSION')
+    WHERE CONDITION_CONCEPT_ID <> 0 
+        AND CONDITION_CONCEPT_ID IS NOT NULL 
+        AND (STANDARD_CONCEPT <> 'S' OR STANDARD_CONCEPT IS NULL)
+
+    UNION ALL
+
+    -- Check for non-standard CONDITION_TYPE_CONCEPT_IDs 
+    SELECT 
+        'CONDITION_TYPE_CONCEPT_ID' AS METRIC_FIELD,
+        'NON-STANDARD' AS QA_METRIC,
+        'INVALID DATA' AS ERROR_TYPE,
+        COUNT(*) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.CONDITION_OCCURRENCE_RAW CO
+    LEFT JOIN CARE_RES_OMOP_GEN_WKSP.OMOP.CONCEPT AS C
+        ON CO.CONDITION_TYPE_CONCEPT_ID = C.CONCEPT_ID
+        AND UPPER(C.DOMAIN_ID) = 'TYPE CONCEPT'
+        AND UPPER(C.CONCEPT_CLASS_ID) = 'TYPE CONCEPT'
+    WHERE CONDITION_TYPE_CONCEPT_ID <> 0
+        AND CONDITION_TYPE_CONCEPT_ID IS NOT NULL
+        AND (STANDARD_CONCEPT <> 'S' OR STANDARD_CONCEPT IS NULL)
+
+    UNION ALL
+
+    -- Check for non-standard CONDITION_SOURCE_CONCEPT_IDs
+    SELECT 
+        'CONDITION_SOURCE_CONCEPT_ID' AS METRIC_FIELD,
+        'NON-STANDARD' AS QA_METRIC,
+        'INVALID DATA' AS ERROR_TYPE, 
+        COUNT(*) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.CONDITION_OCCURRENCE_RAW CO
+    LEFT JOIN CARE_RES_OMOP_GEN_WKSP.OMOP.CONCEPT AS C
+        ON CO.CONDITION_SOURCE_CONCEPT_ID = C.CONCEPT_ID
+        AND UPPER(C.DOMAIN_ID) = 'CONDITION'
+        AND C.CONCEPT_CLASS_ID IN ('ICD9CM','ICD10CM')
+    WHERE CONDITION_SOURCE_CONCEPT_ID <> 0
+        AND CONDITION_SOURCE_CONCEPT_ID IS NOT NULL
+        AND (C.CONCEPT_ID IS NOT NULL)
+
+    UNION ALL
+
+    -- Check for non-standard CONDITION_STATUS_CONCEPT_IDs
+    SELECT 
+        'CONDITION_STATUS_CONCEPT_ID' AS METRIC_FIELD,
+        'NON-STANDARD' AS QA_METRIC,
+        'INVALID DATA' AS ERROR_TYPE,
+        COUNT(*) AS CNT
+    FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.CONDITION_OCCURRENCE_RAW AS CO
+    LEFT JOIN CARE_RES_OMOP_GEN_WKSP.OMOP.CONCEPT AS C
+        ON CO.CONDITION_STATUS_CONCEPT_ID = C.CONCEPT_ID
+        AND UPPER(C.DOMAIN_ID) = 'CONDITION STATUS'
+    WHERE CONDITION_STATUS_CONCEPT_ID <> 0
+        AND CONDITION_STATUS_CONCEPT_ID IS NOT NULL
+        AND (STANDARD_CONCEPT <> 'S' OR STANDARD_CONCEPT IS NULL)
+)
+
+-- Aggregate results
+SELECT 
+    CAST(GETDATE() AS DATE) AS RUN_DATE,
+    'CONDITION_OCCURRENCE' AS STANDARD_DATA_TABLE,
+    QA_METRIC AS QA_METRIC,
+    METRIC_FIELD AS METRIC_FIELD,
+    COALESCE(SUM(CNT),0) AS QA_ERRORS,
+    CASE WHEN SUM(CNT) <> 0 THEN ERROR_TYPE ELSE NULL END AS ERROR_TYPE,
+    (SELECT COUNT(*) AS NUM_ROWS 
+     FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.CONDITION_OCCURRENCE_RAW) AS TOTAL_RECORDS,
+    (SELECT COUNT(*) AS NUM_ROWS 
+     FROM CARE_RES_OMOP_DEV2_WKSP.OMOP.CONDITION_OCCURRENCE) AS TOTAL_RECORDS_CLEAN
+FROM NONSTANDARD_COUNT
+GROUP BY METRIC_FIELD, QA_METRIC, ERROR_TYPE;
+
+/*
+Column Descriptions:
+- RUN_DATE: Date QA check was executed
+- STANDARD_DATA_TABLE: Name of table being checked
+- QA_METRIC: Type of QA check performed
+- METRIC_FIELD: Field being validated
+- QA_ERRORS: Count of records failing validation
+- ERROR_TYPE: Description of validation failure
+- TOTAL_RECORDS: Total count of records in raw table
+- TOTAL_RECORDS_CLEAN: Total count of records in clean table
+
+Logic:
+1. Checks each concept ID field against CONCEPT table to identify non-standard concepts
+2. Non-standard concepts are those where:
+   - Concept exists but is not marked as standard (S)
+   - Concept does not exist in vocabulary
+   - Concept exists in wrong domain
+3. Aggregates counts of non-standard concepts by field
+4. Returns summary metrics including error counts and total record counts
+
+LEGAL DISCLAIMER:
+This code is provided "AS IS" without warranty of any kind.
+The entire risk as to the quality and performance of the code is with you.
+Should the code prove defective, you assume the cost of all necessary
+servicing, repair or correction.
+*/

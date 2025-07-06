@@ -1,0 +1,34 @@
+version: 2
+
+models:
+
+  - name: OBSERVATION_PERIOD
+    description: This table contains records which define spans of time during which two conditions are expected to hold (i) Clinical Events that happened to the Person are recorded in the Event tables, and (ii) absence of records indicate such Events did not occur during this span of time.
+    columns:
+      - name: OBSERVATION_PERIOD_ID
+        description: A Person can have multiple discrete Observation Periods which are identified by the Observation_Period_Id.
+        tests:
+          - unique
+          - not_null
+
+      - name: PERSON_ID
+        description: The PERSON_ID of the Person for whom the Observation is recorded. This may be a system generated code.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PERSON_RAW')
+              field: PERSON_ID
+
+      - name: OBSERVATION_PERIOD_START_DATE
+        description: Use this date to determine the start date of the Observation Period.
+
+      - name: observation_period_end_date
+        description: Use this date to determine the end date of the period for which we can assume that all events for a Person are recorded.
+
+      - name: PERIOD_TYPE_CONCEPT_ID
+        description: This field can be used to determine the provenance of the Observation Period as in whether the period was determined from an insurance enrollment file, EHR healthcare encounters, or other sources.
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID

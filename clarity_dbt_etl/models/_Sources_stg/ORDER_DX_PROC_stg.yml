@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: ORDER_DX_PROC_stg
+    description: The ORDER_DX_PROC table enables you to report on the diagnoses associated with procedures ordered in clinical system. Since one procedure order may be associated with multiple diagnoses, each row in this table is one procedure - diagnosis relation
+    columns:
+      - name: ORDER_PROC_ID
+        description: 	The unique ID of the procedure order record.
+      - name: LINE
+        description: 	The line number for the information associated with this procedure record. Multiple pieces of information can be associated with this record.
+      - name: DX_ID
+        description: The unique ID of the diagnosis record associated with the procedure order.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - ORDER_PROC_ID
+            - LINE

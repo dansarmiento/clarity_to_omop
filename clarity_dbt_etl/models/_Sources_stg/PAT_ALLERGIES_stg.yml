@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: PAT_ALLERGIES_stg
+    description: No description available
+    columns:
+      - name: PAT_ID
+        description: The unique ID of the patient record for this row. This column is frequently used to link to the PATIENT table.
+      - name: LINE
+        description: The line number for the information associated with this record
+      - name: ALLERGY_RECORD_ID
+        description: 	This column contains the allergies that are associated with the patient.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - PAT_ID
+            - LINE

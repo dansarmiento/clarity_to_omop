@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: EXTERNAL_CNCPT_MAP_stg
+    description: The EXTERNAL_CNCPT_MAP table stores information about mappings as well as the entities (record/category/item) they reference. The SNOMED concepts or SmartData elements referenced by mappings are stored in the CONCEPT_MAPPED table.
+    columns:
+      - name: MAPPING_ID
+        description: The unique identifier (.1 item) for the mapping record
+        tests:
+          - unique
+          - not_null
+      - name: ENTITY_VALUE_NUM
+        description: The entity value linked to the concepts defined for the current mapping. This value is often a record ID. ENTITY_VALUE_NUM is only populated if the linked value is a number.
+      - name: ENTITY_INI
+        description: The three letter abbreviation of the entity master file linked to the concepts defined for the current mapping.
+      - name: ENTITY_ITEM
+        description: The item number of the entity item linked to the concepts defined for the current mapping.

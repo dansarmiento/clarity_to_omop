@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_CALCULATED_ENC_STAT_stg
+    description: This table contains the category information for calculated encounter statuses.
+    columns:
+      - name: CALCULATED_ENC_STAT_C
+        description: 	The category number for the calculated encounter status. This is usually the same as the internal ID.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_CALCULATED_ENC_STAT_NAME
+        description: UPPER("NAME") The name given to this category item.

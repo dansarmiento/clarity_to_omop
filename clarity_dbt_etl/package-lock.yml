@@ -1,0 +1,6 @@
+packages:
+  - git: https://github.com/dbt-labs/dbt-utils.git
+    revision: 064c2abee80816ea855de32e66e54e96d9916677
+  - git: https://github.com/danflippo/dbt_constraints.git
+    revision: b8a1a082d5c653e65469b5bc53e2032afc160663
+sha1_hash: c067bdc0ba0d46d7848e0d54f228fec21c5baf0b

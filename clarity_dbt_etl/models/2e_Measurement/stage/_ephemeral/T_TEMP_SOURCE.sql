@@ -1,0 +1,14 @@
+{{ config(materialized='ephemeral') }}
+--BEGIN cte__T_TEMP_SOURCE
+    SELECT DISTINCT
+        --AOU_ID
+        PERSON_ID
+        ,PAT_ENC_CSN_ID
+        ,RECORDED_TIME
+        ,MEAS_VALUE AS MEAS_VALUE
+
+    FROM {{ref('PULL_MEASUREMENT_HOSP_FLOWSHEET')}} AS PULL_MEASUREMENT_HOSP_FLOWSHEET
+    --7-TEMP SOURCE
+    WHERE FLO_MEAS_ID IN ('7')
+--END cte__T_TEMP_SOURCE
+--

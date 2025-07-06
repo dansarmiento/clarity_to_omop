@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: CONDITION_ERA
+    description: A Condition Era is defined as a span of time when the Person is assumed to have a given condition. .
+    columns:
+      - name: CONDITION_ERA_ID
+        description: The unique key given to a condition record for a person. Refer to the ETL for how duplicate conditions during the same visit were handled; Each instance of a condition present in the source data should be assigned this unique key. In some cases, a person can have multiple records of the same condition within the same visit. It is valid to keep these duplicates and assign them individual, unique, CONDITION_OCCURRENCE_IDs, though it is up to the ETL how they should be handled.
+        tests:
+          - unique
+          - not_null
+
+      - name: PERSON_ID
+        description: The PERSON_ID of the PERSON for whom the condition is recorded.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PERSON_RAW')
+              field: PERSON_ID
+
+      - name: CONDITION_CONCEPT_ID
+        description: The CONDITION_CONCEPT_ID field is recommended for primary use in analyses, and must be used for network studies. This is the standard concept mapped from the source value which represents a condition; The CONCEPT_ID that the CONDITION_SOURCE_VALUE maps to. Only records whose source values map to concepts with a domain of “Condition” should go in this table.
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: CONDITION_ERA_START_DATE
+        description: The start date for the Condition Era constructed from the individual instances of Condition Occurrences. It is the start date of the very first chronologically recorded instance of the condition with at least 31 days since any prior record of the same Condition.
+        tests:
+          - not_null
+
+      - name: CONDITION_ERA_END_DATE
+        description: The end date for the Condition Era constructed from the individual instances of Condition Occurrences. It is the end date of the final continuously recorded instance of the Condition.
+        tests:
+          - not_null
+
+      - name: CONDITION_OCCURRENCE_COUNT
+        description: The number of individual Condition Occurrences used to construct the condition era.
+
+
+
+
+
+

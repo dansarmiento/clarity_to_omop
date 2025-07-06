@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: PROBLEM_LIST_HX_stg
+    description: This table contains data relating to the history of problems from patients' problem lists in the clinical system.
+
+    columns:
+      - name: PROBLEM_LIST_ID
+        description: The unique ID of this Problem List entry.
+      - name: LINE
+        description: Used to identify the particular problem within the historical problems
+      - name: HX_DATE_NOTED
+        description: Represents the historical value of the first possible date that a problem could have been noted/onset on.
+      - name: HX_DATE_RESOLVED
+        description: The date on which this problem was resolved.
+      - name: HX_STATUS_C
+        description: The category value associated with the problem's state Active, Resolved, or Deleted as of this historical event.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - PROBLEM_LIST_ID
+            - LINE

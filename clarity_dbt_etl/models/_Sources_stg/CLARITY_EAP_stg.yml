@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: CLARITY_EAP_stg
+    description: The CLARITY_EAP table contains basic information about the procedure records in your system. 
+    columns:
+      - name: PROC_ID
+        description: 	The unique ID of each procedure record in your system. This is not the CPT? code or other procedure code.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: PROC_CODE
+        description: The code for each procedure.
+      - name: PROC_NAME
+        description: The name of each procedure..

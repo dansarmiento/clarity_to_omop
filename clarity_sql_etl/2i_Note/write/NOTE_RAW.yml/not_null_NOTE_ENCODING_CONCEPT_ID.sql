@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select ENCODING_CONCEPT_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.NOTE
+where ENCODING_CONCEPT_ID is null
+
+

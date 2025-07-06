@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_APPT_STATUS_stg
+    description: This table contains the category information for appointment statuses.
+    columns:
+      - name: APPT_STATUS_C
+        description: 	This is the appointmemt status category code.
+        tests:
+          - unique
+          - not_null
+      - name: ZC_APPT_STATUS_NAME
+        description: UPPER("NAME") The name given to this category item.

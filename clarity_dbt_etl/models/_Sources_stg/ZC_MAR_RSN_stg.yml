@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: ZC_MAR_RSN_stg
+    description: No description available
+    columns:
+      - name: REASON_C
+        description: 	No description available
+        tests:
+          - unique
+          - not_null         
+      - name: ZC_MAR_RSN_NAME
+        description: UPPER("NAME") The name given to this category item.

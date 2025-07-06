@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: RX_NDC_STATUS_stg
+    description: 	This table contains the medication related to NDC for each contact.
+
+    columns:
+      - name: 	NDC_ID
+        description: The unique ID for the NDC (National Drug Code).
+      - name: 	CONTACT_DATE_REAL
+        description: 	A unique, internal contact date in decimal format.
+      - name: CNCT_SERIAL_NUM
+        description: 	The contact serial number for the NDC line.
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - NDC_ID
+            - CONTACT_DATE_REAL

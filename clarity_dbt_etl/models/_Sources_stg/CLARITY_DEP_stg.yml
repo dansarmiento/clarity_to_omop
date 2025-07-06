@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: CLARITY_DEP_stg
+    description: 	The CLARITY_DEP table contains high-level information about departments.
+    columns:
+      - name: DEPARTMENT_ID
+        description: 	The unique ID number assigned to the department record
+        tests:
+          - unique
+          - not_null
+      - name: REV_LOC_ID
+        description: The unique ID of the revenue location to which the department is linked.
+      - name: DEPARTMENT_NAME
+        description: The name of the department.
+

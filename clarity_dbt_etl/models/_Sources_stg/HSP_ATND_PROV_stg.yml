@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: HSP_ATND_PROV_stg
+    description: The HSP_ATND_PROV table contains information on inpatient or outpatient attending providers.
+    columns:
+      - name: PAT_ENC_CSN_ID
+        description: A unique serial number for this encounter.
+      - name: LINE
+        description: The line number of the attending provider for the patient.
+      - name: PAT_ID
+        description: The ID of the patient with this attending provider.
+      - name: ATTEND_FROM_DATE
+        description: The date and time the attending provider started for the patient.
+      - name: ATTEND_TO_DATE
+        description: The date and time the attending provider ended for the patient.
+      - name: PROV_ID
+        description: This column stores the unique identifier for the attending provider for the patient.
+      - name: ED_ATTEND_YN
+        description: UPPER(ED_ATTEND_YN) Indicates whether or not this physician was an attending in the ED.   
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - PAT_ENC_CSN_ID
+            - LINE

@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: PAT_ENC_DX_stg
+    description: 	The patient encounter diagnosis table contains one record for each diagnosis associated with each encounter level of service. This table will contain all diagnoses specified on the Order Summary screen.
+    columns:
+      - name: PAT_ID
+        description: 	The unique ID assigned to the patient record (EPT .1).
+      - name: PAT_ENC_CSN_ID
+        description: 	A unique serial number for this encounter. 
+      - name: LINE
+        description: The line number of the diagnosis within the encounter. This is the second column in the primary key and uniquely identifies this diagnosis on the encounter.
+      - name: CONTACT_DATE
+        description: The contact date of the encounter associated with this diagnosis
+      - name: DX_ID
+        description: The unique ID of the diagnosis record associated with the patient encounter.
+      - name: PRIMARY_DX_YN
+        description: This is a one character field that indicates whether this diagnosis was the primary diagnosis for the encounter. If the diagnosis was the primary this field will have a value of 'Y' otherwise it will have a value of 'N'.
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - PAT_ENC_CSN_ID
+            - LINE

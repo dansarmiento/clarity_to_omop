@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_NDC_UNITS_stg
+    description: This category table stores the units for NDCs (National Drug Codes)
+    columns:
+      - name: NDC_UNITS_C
+        description: 	The NDC units category value.
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: ZC_NDC_UNITS_NAME
+        description: UPPER("NAME") The name given to this category item.
+

@@ -1,0 +1,87 @@
+version: 2
+
+models:
+
+  - name: DEVICE_EXPOSURE
+    description: The DEVICE_EXPOSURE table captures information about a person’s exposure to a foreign physical object or instrument which is used for diagnostic or therapeutic purposes through a mechanism beyond chemical action.
+    columns:
+      - name: DEVICE_EXPOSURE_ID
+        description: The unique key given to records a person’s exposure to a foreign physical object or instrument; Each instance of an exposure to a foreign object or device present in the source data should be assigned this unique key.
+        tests:
+          - unique
+          - not_null
+
+      - name: PERSON_ID
+        tests:
+          - not_null
+          - relationships:
+              to: ref('PERSON')
+              field: PERSON_ID
+
+      - name: DEVICE_CONCEPT_ID
+        description: The DEVICE_CONCEPT_ID field is recommended for primary use in analyses, and must be used for network studies. This is the standard concept mapped from the source concept id which represents a foreign object or instrument the person was exposed to; The CONCEPT_ID that the DEVICE_SOURCE_VALUE maps to.
+        tests:
+          - not_null
+          - relationships:
+              to: source('OMOP','CONCEPT')
+              field: CONCEPT_ID
+
+      - name: device_exposure_start_date
+        description: Use this date to determine the start date of the device record; Valid entries include a start date of a procedure to implant a device, the date of a prescription for a device, or the date of device administration.
+
+      - name: device_exposure_start_datetime
+        description: This is not required, though it is in v6. If a source does not specify datetime the convention is to set the time to midnight (00:00:0000)
+
+      - name: device_exposure_end_date
+        description: The DEVICE_EXPOSURE_END_DATE denotes the day the device exposure ended for the patient, if given; Put the end date or discontinuation date as it appears from the source data or leave blank if unavailable.
+
+      - name: device_exposure_end_datetime
+        description: If a source does not specify datetime the convention is to set the time to midnight (00:00:0000)
+
+      - name: DEVICE_TYPE_CONCEPT_ID
+        description: You can use the TYPE_CONCEPT_ID to denote the provenance of the record, as in whether the record is from administrative claims or EHR; Choose the drug_type_concept_id that best represents the provenance of the record, for example whether it came from a record of a prescription written or physician administered drug.
+        tests:
+          - not_null
+
+      - name: unique_device_id
+        description: This is the Unique Device Identification number for devices regulated by the FDA, if given; For medical devices that are regulated by the FDA, a Unique Device Identification (UDI) is provided if available in the data source and is recorded in the UNIQUE_DEVICE_ID field.
+
+      - name: quantity
+      - name: PROVIDER_ID
+        description: The Provider associated with device record, e.g. the provider who wrote the prescription or the provider who implanted the device; The ETL may need to make a choice as to which PROVIDER_ID to put here. Based on what is available this may or may not be different than the provider associated with the overall VISIT_OCCURRENCE record.
+        tests:
+          - not_null:
+              config:
+                severity: warn
+          - relationships:
+              to: ref('PROVIDER')
+              field: PROVIDER_ID
+              config:
+                severity: warn
+
+      - name: VISIT_OCCURRENCE_ID
+        description: The Visit during which the device was prescribed or given; To populate this field device exposures must be explicitly initiated in the visit.
+        tests:
+          - not_null:
+              config:
+                severity: warn
+          - relationships:
+              to: ref('VISIT_OCCURRENCE')
+              field: VISIT_OCCURRENCE_ID
+
+      - name: VISIT_DETAIL_ID
+        description: Not Applicable - Value:0 (The Visit Detail during which the device was prescribed or given; To populate this field device exposures must be explicitly initiated in the visit detail record.)
+        tests:
+          - accepted_values:
+              values:
+                - 0
+
+      - name: device_source_value
+        description: This field houses the verbatim value from the source data representing the device exposure that occurred. For example, this could be an NDC or Gemscript code; This code is mapped to a Standard Device Concept in the Standardized Vocabularies and the original code is stored here for reference.
+
+      - name: DEVICE_SOURCE_CONCEPT_ID
+        description: Not Applicable - Value:0 (This is the concept representing the device source value and may not necessarily be standard. This field is discouraged from use in analysis because it is not required to contain Standard Concepts that are used across the OHDSI community, and should only be used when Standard Concepts do not adequately represent the source detail for the Device necessary for a given analytic use case. Consider using DEVICE_CONCEPT_ID instead to enable standardized analytics that can be consistent across the network; If the DEVICE_SOURCE_VALUE is coded in the source data using an OMOP supported vocabulary put the concept id representing the source value here.)
+        tests:
+          - accepted_values:
+              values:
+                - 0

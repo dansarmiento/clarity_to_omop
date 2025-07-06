@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: D_PROV_PRIMARY_HIERARCHY_stg
+    description: 	This table gives provider-level information for use in reports. It includes, among other details, the provider's primary department, as well as that department's location and service area. It also calculates "name with id" columns for provider, department, location, and service area. Consider using this table when reporting on provider-level information. It is intended to improve performance and maintainability
+    columns:
+      - name: PROV_ID
+        description: The unique ID assigned to the provider record. This ID can be encrypted.
+        tests:
+          - unique
+          - not_null
+      - name: SPECIALTY_C
+        description: UPPER(SPECIALTY_C) The unique ID of the specialty in the corresponding category lisT.

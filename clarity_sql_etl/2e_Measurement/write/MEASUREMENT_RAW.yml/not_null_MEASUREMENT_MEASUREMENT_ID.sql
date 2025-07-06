@@ -1,0 +1,11 @@
+
+    
+    
+
+
+
+select MEASUREMENT_ID
+from CARE_RES_OMOP_DEV2_WKSP.OMOP.MEASUREMENT
+where MEASUREMENT_ID is null
+
+

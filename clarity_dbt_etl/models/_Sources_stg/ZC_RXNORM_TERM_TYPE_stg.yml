@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_RXNORM_TERM_TYPE_stg
+    description: This table stores possible options for specimen weight units.
+    columns:
+      - name: RXNORM_TERM_TYPE_C
+        description: 	The category number for the specimen weight unit. 
+        tests:
+          - unique
+          - not_null
+      - name: ZC_RXNORM_TERM_TYPE_NAME
+        description: UPPER("NAME") The name given to this category item.
+

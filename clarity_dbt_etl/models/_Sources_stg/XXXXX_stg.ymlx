@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: XXXXX_stg
+    description: No description available
+    columns:
+      - name: YYYY
+        description: 	No description available
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: XXXXX_NAME
+        description: UPPER("NAME") The name given to this category item.
+
+    tests:
+      # Multiple column constraints
+      - dbt_constraints.primary_key:
+          column_names:
+            - ORDER_MED_ID
+            - LINE

@@ -1,0 +1,102 @@
+/*******************************************************************************
+* Script: STAGE_OBSERVATION_HSP_ICD
+* Description: Extracts and transforms hospital ICD observation data into OMOP format
+* 
+* Key transformations:
+* - Maps ICD-9 codes for dates before 2015-10-01
+* - Maps ICD-10 codes for dates from 2015-10-01 onwards
+* - Joins to visit and provider information
+* - Includes both standard and source concepts
+*******************************************************************************/
+
+SELECT DISTINCT
+    PULL_OBSERVATION_HOSP_ICD.PERSON_ID                         AS PERSON_ID,
+    -- Map to appropriate ICD concept based on date
+    CASE
+        WHEN PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE >= '2015-10-01'
+            THEN T_ICD10_CONCEPT.CONCEPT_ID
+        ELSE T_ICD9_CONCEPT.CONCEPT_ID
+    END                                                         AS OBSERVATION_CONCEPT_ID,
+    PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE::DATE           AS OBSERVATION_DATE,
+    PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE                 AS OBSERVATION_DATETIME,
+    32817                                                       AS OBSERVATION_TYPE_CONCEPT_ID, --EHR
+    NULL                                                        AS VALUE_AS_NUMBER,
+    NULL                                                        AS VALUE_AS_STRING,
+    
+    -- Map value concept based on date
+    CASE
+        WHEN PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE >= '2015-10-01'
+            THEN T_ICD10_CONCEPT_VALUE.CONCEPT_ID
+        ELSE T_ICD9_CONCEPT_VALUE.CONCEPT_ID
+    END                                                         AS VALUE_AS_CONCEPT_ID,
+    
+    -- Standard fields
+    0                                                           AS UNIT_CONCEPT_ID,
+    0                                                           AS QUALIFIER_CONCEPT_ID,
+    PROVIDER.PROVIDER_ID                                        AS PROVIDER_ID,
+    VISIT_OCCURRENCE.VISIT_OCCURRENCE_ID                        AS VISIT_OCCURRENCE_ID,
+    0                                                           AS VISIT_DETAIL_ID,
+    
+    -- Source values with ICD code and name
+    CASE
+        WHEN PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE >= '2015-10-01'
+            THEN LEFT(T_ICD10_SOURCE.CONCEPT_CODE || ':' || T_ICD10_SOURCE.CONCEPT_NAME, 50)
+        ELSE LEFT(T_ICD9_SOURCE.CONCEPT_CODE || ':' || T_ICD9_SOURCE.CONCEPT_NAME, 50)
+    END                                                         AS OBSERVATION_SOURCE_VALUE,
+    
+    -- Source concept mapping
+    CASE
+        WHEN PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE >= '2015-10-01'
+            THEN T_ICD10_SOURCE.CONCEPT_ID
+        ELSE T_ICD9_SOURCE.CONCEPT_ID
+    END                                                         AS OBSERVATION_SOURCE_CONCEPT_ID,
+    
+    UNIT_SOURCE_VALUE                                          AS UNIT_SOURCE_VALUE,
+    QUALIFIER_SOURCE_VALUE                                     AS QUALIFIER_SOURCE_VALUE,
+    NULL::NUMBER(28,0)                                         AS OBSERVATION_EVENT_ID,
+    0::NUMBER(28,0)                                            AS OBS_EVENT_FIELD_CONCEPT_ID,
+    VALUE_SOURCE_VALUE::VARCHAR(50)                            AS VALUE_SOURCE_VALUE,
+
+    -- Custom fields for tracking
+    'OBSERVATION_HSP_ICD'                                      AS ETL_MODULE,
+    VISIT_OCCURRENCE.phi_PAT_ID                               AS STAGE_PAT_ID,
+    VISIT_OCCURRENCE.phi_MRN_CPI                              AS STAGE_MRN_CPI,
+    VISIT_OCCURRENCE.phi_CSN_ID                               AS STAGE_CSN_ID,
+    PULL_DX_ID                                                AS STAGE_DX_ID
+
+FROM CARE_RES_OMOP_DEV2_WKSP.OMOP_PULL.PULL_OBSERVATION_HOSP_ICD AS PULL_OBSERVATION_HOSP_ICD
+
+    -- Join to get visit information
+    INNER JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP.VISIT_OCCURRENCE_RAW AS VISIT_OCCURRENCE
+        ON PULL_OBSERVATION_HOSP_ICD.PULL_CSN_ID = VISIT_OCCURRENCE.phi_CSN_ID
+
+    -- ICD source concept mappings
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_STAGE.T_ICD_SOURCE_OBSERVATION AS T_ICD9_SOURCE
+        ON PULL_OBSERVATION_HOSP_ICD.PULL_ICD9_CODE = T_ICD9_SOURCE.CONCEPT_CODE
+
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_STAGE.T_ICD_SOURCE_OBSERVATION AS T_ICD10_SOURCE
+        ON PULL_OBSERVATION_HOSP_ICD.PULL_ICD10_CODE = T_ICD10_SOURCE.CONCEPT_CODE
+
+    -- Standard concept mappings
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_STAGE.T_CONCEPT_OBSERVATION AS T_ICD9_CONCEPT
+        ON T_ICD9_CONCEPT.SOURCE_CONCEPT_ID = T_ICD9_SOURCE.CONCEPT_ID
+
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_STAGE.T_CONCEPT_OBSERVATION AS T_ICD10_CONCEPT
+        ON T_ICD10_CONCEPT.SOURCE_CONCEPT_ID = T_ICD10_SOURCE.CONCEPT_ID
+
+    -- Value concept mappings
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_STAGE.T_CONCEPT_OBSERVATION_VALUE AS T_ICD9_CONCEPT_VALUE
+        ON T_ICD9_CONCEPT_VALUE.SOURCE_CONCEPT_ID = T_ICD9_SOURCE.CONCEPT_ID
+
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP_STAGE.T_CONCEPT_OBSERVATION_VALUE AS T_ICD10_CONCEPT_VALUE
+        ON T_ICD10_CONCEPT_VALUE.SOURCE_CONCEPT_ID = T_ICD10_SOURCE.CONCEPT_ID
+
+    -- Provider information
+    LEFT JOIN CARE_RES_OMOP_DEV2_WKSP.OMOP.PROVIDER_RAW AS PROVIDER
+        ON PULL_OBSERVATION_HOSP_ICD.PROVIDER_SOURCE_VALUE = PROVIDER.PROVIDER_SOURCE_VALUE
+
+WHERE
+    -- Filter for valid concept mappings based on date
+    (PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE >= '2015-10-01' AND T_ICD10_CONCEPT.CONCEPT_ID IS NOT NULL)
+    OR
+    (PULL_OBSERVATION_HOSP_ICD.OBSERVATION_DATE < '2015-10-01' AND T_ICD9_CONCEPT.CONCEPT_ID IS NOT NULL);

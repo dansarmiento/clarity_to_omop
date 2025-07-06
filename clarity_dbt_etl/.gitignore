@@ -1,0 +1,9 @@
+
+# dbt specific
+target/
+analyses/
+dbt_packages/
+logs/
+dbt_modules/
+.vscode/
+

@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ZC_MAR_RSLT_stg
+    description: No description available
+    columns:
+      - name: RESULT_C
+        description: 	No description available
+        tests:
+          - unique
+          - not_null         
+      - name: ZC_MAR_RSLT_NAME
+        description: UPPER("NAME") The name given to this category item.
+

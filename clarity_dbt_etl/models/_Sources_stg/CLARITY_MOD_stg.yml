@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: CLARITY_MOD_stg
+    description: This table contains masterfile information on billing modifiers.
+    columns:
+      - name: MODIFIER_ID
+        description: 	The unique id of the modifier record
+        tests:
+          - unique #if primary key
+          - not_null #if primary key
+      - name: 	MODIFIER_NAME
+        description: UPPER("MODIFIER_NAME") The name of the modifier record.

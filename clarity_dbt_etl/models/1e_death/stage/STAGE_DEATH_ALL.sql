@@ -1,0 +1,26 @@
+--STAGE_DEATH_ALL
+{#-- {{ config(materialized = 'view', schema = 'OMOP_STAGE') }}#}
+
+SELECT DISTINCT
+    PULL_DEATH_ALL.PERSON_ID         AS PERSON_ID
+    ,PULL_DEATH_ALL.DEATH_DATE       AS DEATH_DATE
+    ,PULL_DEATH_ALL.DEATH_DATETIME   AS DEATH_DATETIME
+
+	-------- Non-OMOP Fields ------------
+	, 'STAGE_PERSON_ALL' 						        AS ETL_MODULE
+	, PULL_DEATH_ALL.PULL_PAT_ID                        AS STAGE_PAT_ID
+    , PULL_DEATH_ALL.PULL_MRN_CPI                       AS STAGE_MRN_CPI
+    -- ,COALESCE(T_DEATH_CAUSE_SOURCE.CONCEPT_ID,0)     AS CAUSE_CONCEPT_ID
+    -- ,PULL_DEATH_ALL.CAUSE_DX_ID                      AS CAUSE_SOURCE_VALUE
+    ,NULL                                               AS CAUSE_CONCEPT_ID
+    ,NULL                                               AS CAUSE_SOURCE_VALUE
+    ,NULL                                               AS CAUSE_SOURCE_CONCEPT_ID
+ FROM {{ref('PULL_DEATH_ALL')}} AS PULL_DEATH_ALL
+
+-- Death Cause creates duplicates in OMOP 5.4
+	-- LEFT JOIN {{ref('T_DEATH_CAUSE_SOURCE')}} AS T_DEATH_CAUSE_SOURCE
+	-- 	ON PULL_DEATH_ALL.CAUSE_SNOMED_CODE = T_DEATH_CAUSE_SOURCE.CONCEPT_CODE
+	-- LEFT JOIN {{ref('T_DEATH_CAUSE_CONCEPT')}} AS  T_DEATH_CAUSE_CONCEPT
+	-- 	ON T_DEATH_CAUSE_CONCEPT.SOURCE_CONCEPT_ID = T_DEATH_CAUSE_SOURCE.CONCEPT_ID
+
+WHERE PULL_DEATH_ALL.DEATH_DATE IS NOT NULL

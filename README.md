@@ -1,5 +1,3 @@
-# README.md
-
 # Implementing `clarity_to_omop` with dbt-core and SQL Server
 
 This guide provides a comprehensive implementation plan to build an OMOP Common Data Model (CDM) database on SQL Server and to manage the data import and transformation from an Epic Clarity source using the `clarity_to_omop` dbt project.

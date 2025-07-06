@@ -25,7 +25,7 @@ The GitHub repository [`dansarmiento/clarity_to_omop`](https://github.com/dansar
 
 ---
 
-## Part 1: Building the OMOP Database on SQL Server 🏗️
+## Part 1: Building the OMOP Database on SQL Server
 
 This section covers the initial setup of the destination data warehouse.
 
@@ -53,7 +53,7 @@ This is a critical step for data normalization within the OMOP CDM.
 
 ---
 
-## Part 2: Managing Data Import with dbt-core ⚙️
+## Part 2: Managing Data Import with dbt-core
 
 With the destination database ready, you can now configure `dbt` to perform the data transformation.
 
